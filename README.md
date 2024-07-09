@@ -10,3 +10,4 @@
     - JSX, allows to embed html to be embedded in your Javascript components
 - Vite
     - use vite to create my react app
+    - main.tsx is entry point of application
