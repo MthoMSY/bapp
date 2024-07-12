@@ -1,4 +1,4 @@
-import { Report } from "./Report";
+import { Items } from "./Items";
 export function Dashboard() {
   const budgets = [
     { id: 1, name: "First" },
@@ -14,7 +14,7 @@ export function Dashboard() {
   ];
   return (
     <div className="columns is-mobile">
-      <div className="column is-one-third is-half">
+      {/* <div className="column is-one-third is-half">
         <h2 className="subtitle has-text-centered">Your active budgets</h2>
         <div className="table-container">
           <table>
@@ -32,10 +32,9 @@ export function Dashboard() {
             ))}
           </table>
         </div>
-      </div>
+      </div> */}
       <div className="column">
-        <h2 className="subtitle has-text-centered">Report</h2>
-        <Report />
+        <Items />
       </div>
     </div>
   );

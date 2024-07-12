@@ -1,7 +1,7 @@
 import { Dashboard } from "./components/Dashboard";
 import { Login } from "./components/Login";
 
-const loggedIn = true;
+const loggedIn = false;
 function App() {
   return (
     <div className="App">
@@ -9,8 +9,7 @@ function App() {
         <h1 className="title has-text-centered">Easy budget App</h1>
       </div>
       <section className="section">
-        {!loggedIn && <Login />}
-        {loggedIn && <Dashboard />}
+        {loggedIn ? <Dashboard /> : <Login />}
       </section>
     </div>
   );
