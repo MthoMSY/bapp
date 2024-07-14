@@ -12,16 +12,11 @@ export function Login() {
   const form = useForm<FormValues>();
   const { register, control, handleSubmit, formState } = form;
 
-  // const dispatch = useAppDispatch();
   const dispatch = useAppDispatch();
   const { isLoggedIn } = useAppSelector((state) => state.user);
 
   const onSubmit = (formValues: FormValues) => {
     dispatch(signIn(formValues));
-  };
-
-  const onHandleError = () => {
-    console.log("an error occurred on submission");
   };
 
   const { errors } = formState;
@@ -30,7 +25,7 @@ export function Login() {
     <div className="box ">
       <h1>Is logged In: {JSON.stringify(isLoggedIn)}</h1>
       <div className="block">
-        <form onSubmit={handleSubmit(onSubmit, onHandleError)} noValidate>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="field">
             <div className="control has-icons-left">
               <input

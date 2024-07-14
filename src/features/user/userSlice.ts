@@ -1,5 +1,4 @@
 import {
-  type PayloadAction,
   createSlice,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
@@ -31,15 +30,7 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    logIn: (
-      state,
-      action: PayloadAction<{ username: string; password: string }>
-    ) => {
-      state.isLoggedIn = true;
-      state.token = action.payload.password;
-      state.username = action.payload.username;
-    },
-    logOut: (state) => {
+    signOut: (state) => {
       state = initialState;
     },
   },
@@ -52,7 +43,7 @@ const userSlice = createSlice({
   },
 });
 
-export const { logOut, logIn } = userSlice.actions;
+export const { signOut } = userSlice.actions;
 
 export const selectLoggedInUser = (state: RootState) => state.user;
 
