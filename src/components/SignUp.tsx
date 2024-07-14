@@ -1,7 +1,8 @@
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useAppDispatch } from "../hooks/redux";
 import { signUp } from "../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
 
 type FormValues = {
   username: string;
@@ -12,16 +13,19 @@ type FormValues = {
 export function SignUp() {
   const form = useForm<FormValues>();
   const { register, control, handleSubmit, formState, getValues } = form;
+  const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
   const onSubmit = async (formValues: FormValues) => {
-    dispatch(
+    await dispatch(
       signUp({
         username: formValues.username,
         password: formValues.confirmedPassword,
       })
     );
+
+    navigate("/login");
   };
 
   const { errors } = formState;
