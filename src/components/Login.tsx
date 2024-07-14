@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { useAppDispatch } from "../hooks/redux";
 import { signIn } from "../features/user/userSlice";
 
 type FormValues = {
@@ -13,7 +13,6 @@ export function Login() {
   const { register, control, handleSubmit, formState } = form;
 
   const dispatch = useAppDispatch();
-  const { isLoggedIn } = useAppSelector((state) => state.user);
 
   const onSubmit = (formValues: FormValues) => {
     dispatch(signIn(formValues));
@@ -23,7 +22,6 @@ export function Login() {
 
   return (
     <div className="box ">
-      <h1>Is logged In: {JSON.stringify(isLoggedIn)}</h1>
       <div className="block">
         <form onSubmit={handleSubmit(onSubmit)} noValidate>
           <div className="field">

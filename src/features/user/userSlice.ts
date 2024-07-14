@@ -1,7 +1,4 @@
-import {
-  createSlice,
-  createAsyncThunk,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
 import { api } from "../../client.ts";
 
@@ -26,6 +23,15 @@ export const signIn = createAsyncThunk(
   }
 );
 
+export const signUp = createAsyncThunk(
+  "user/signup",
+  async (request: { username: string; password: string }) => {
+    const response = await api.post("/auth/signup", request);
+
+    return response.data;
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -39,6 +45,9 @@ const userSlice = createSlice({
       state.isLoggedIn = true;
       state.username = action.payload.username;
       state.token = action.payload.accessToken;
+    });
+    builder.addCase(signUp.fulfilled, (state, action) => {
+      state = initialState;
     });
   },
 });
