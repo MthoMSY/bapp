@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { useAppDispatch } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signUp } from "../features/user/userSlice";
 
 type FormValues = {
@@ -15,7 +15,7 @@ export function SignUp() {
 
   const dispatch = useAppDispatch();
 
-  const onSubmit = (formValues: FormValues) => {
+  const onSubmit = async (formValues: FormValues) => {
     dispatch(
       signUp({
         username: formValues.username,

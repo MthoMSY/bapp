@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
-import { api } from "../../client.ts";
+import { api } from "../../api";
 
 interface UserState {
   isLoggedIn: boolean;

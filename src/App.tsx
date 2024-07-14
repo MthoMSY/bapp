@@ -1,18 +1,15 @@
-import { Dashboard } from "./components/Dashboard";
-import { Login } from "./components/Login";
-import { SignUp } from "./components/SignUp";
+import { Outlet } from "react-router-dom";
 
-const loggedIn = false;
 function App() {
   return (
-    <div className="App">
-      <div className="section">
-        <h1 className="title has-text-centered">Easy budget App</h1>
+    <>
+      <div className="App">
+        <div className="section">
+          <h1 className="title has-text-centered">Easy budget App</h1>
+        </div>
       </div>
-      <section className="section">
-        {loggedIn ? <Dashboard /> : <SignUp />}
-      </section>
-    </div>
+      <Outlet />
+    </>
   );
 }
 

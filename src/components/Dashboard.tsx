@@ -1,5 +1,10 @@
 import { Items } from "./Items";
+
+import { useParams } from "react-router-dom";
 export function Dashboard() {
+
+  const {userId} = useParams<{userId: string}>()
+
   const budgets = [
     { id: 1, name: "First" },
     { id: 2, name: "Second" },
@@ -13,8 +18,11 @@ export function Dashboard() {
     { id: 4, name: "Tenth" },
   ];
   return (
-    <div className="columns is-mobile">
-      {/* <div className="column is-one-third is-half">
+    <>
+      <div className="section">
+        <h1>user id {userId}</h1>
+        <div className="columns is-mobile">
+          {/* <div className="column is-one-third is-half">
         <h2 className="subtitle has-text-centered">Your active budgets</h2>
         <div className="table-container">
           <table>
@@ -33,9 +41,11 @@ export function Dashboard() {
           </table>
         </div>
       </div> */}
-      <div className="column">
-        <Items />
+          <div className="column">
+            <Items />
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
