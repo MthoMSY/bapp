@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
+import { signIn } from "../features/user/userSlice";
 
 type FormValues = {
   username: string;
@@ -10,8 +12,12 @@ export function Login() {
   const form = useForm<FormValues>();
   const { register, control, handleSubmit, formState } = form;
 
+  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
+  const { isLoggedIn } = useAppSelector((state) => state.user);
+
   const onSubmit = (formValues: FormValues) => {
-    console.log(`Logging in for user ${formValues.username}`);
+    dispatch(signIn(formValues));
   };
 
   const onHandleError = () => {
@@ -22,6 +28,7 @@ export function Login() {
 
   return (
     <div className="box ">
+      <h1>Is logged In: {JSON.stringify(isLoggedIn)}</h1>
       <div className="block">
         <form onSubmit={handleSubmit(onSubmit, onHandleError)} noValidate>
           <div className="field">
@@ -38,8 +45,8 @@ export function Login() {
                   },
                   min: {
                     value: 3,
-                    message: 'Username length must be 3 characters or more'
-                  }
+                    message: "Username length must be 3 characters or more",
+                  },
                 })}
               />
               <span className="icon is-small is-left">
@@ -62,13 +69,8 @@ export function Login() {
                   },
                   min: {
                     value: 8,
-                    message: "Password length should be more than 7 characters"
+                    message: "Password length should be more than 7 characters",
                   },
-                  pattern: {
-                    value: 
-                    /^([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+)[0-9a-zA-Z]*$/,
-                    message: "Password is too weak"
-                  }
                 })}
               />
               <span className="icon is-small is-left">
