@@ -18,14 +18,13 @@ export function SignUp() {
   const dispatch = useAppDispatch();
 
   const onSubmit = async (formValues: FormValues) => {
+    /* TODO navigate to login upon successful sign up */
     await dispatch(
       signUp({
         username: formValues.username,
         password: formValues.confirmedPassword,
       })
     );
-
-    navigate("/login");
   };
 
   const { errors } = formState;

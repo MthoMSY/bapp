@@ -20,7 +20,6 @@ export function Dashboard() {
   return (
     <>
       <div className="section">
-        <h1>user id {userId}</h1>
         <div className="columns is-mobile">
           {/* <div className="column is-one-third is-half">
         <h2 className="subtitle has-text-centered">Your active budgets</h2>

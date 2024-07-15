@@ -3,6 +3,7 @@ import { DevTool } from "@hookform/devtools";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signIn } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 type FormValues = {
   username: string;
@@ -12,19 +13,21 @@ type FormValues = {
 export function Login() {
   const form = useForm<FormValues>();
   const { register, control, handleSubmit, formState } = form;
-  const { token, isLoggedIn } = useAppSelector((state) => state.user);
+  const { isLoggedIn, username } = useAppSelector((state) => state.user);
 
   const navigate = useNavigate();
 
   const dispatch = useAppDispatch();
 
-  const onSubmit = async (formValues: FormValues) => {
-    await dispatch(signIn(formValues));
-
-    if (isLoggedIn) {
-      navigate(`/1/dashboard`);
-    }
+  const onSubmit = (formValues: FormValues) => {
+    dispatch(signIn(formValues));
   };
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate(`/${username.toLocaleLowerCase()}/dashboard`, {replace: true});
+    }
+  }, [isLoggedIn, navigate]);
 
   const { errors } = formState;
 

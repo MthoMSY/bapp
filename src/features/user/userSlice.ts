@@ -1,17 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
 import { api } from "../../api";
+import { act } from "react";
 
 interface UserState {
   isLoggedIn: boolean;
   username: string;
   token: string;
+  userId: string;
 }
 
 const initialState: UserState = {
   isLoggedIn: false,
   username: "",
   token: "",
+  userId: "",
 };
 
 export const signIn = createAsyncThunk(
@@ -45,6 +48,7 @@ const userSlice = createSlice({
       state.isLoggedIn = true;
       state.username = action.payload.username;
       state.token = action.payload.accessToken;
+      state.userId = action.payload.userId;
     });
     builder.addCase(signUp.fulfilled, (state, action) => {
       state = initialState;
