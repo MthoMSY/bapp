@@ -1,8 +1,9 @@
 import { useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { useAppDispatch } from "../hooks/redux";
+import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signUp } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 type FormValues = {
   username: string;
@@ -14,11 +15,17 @@ export function SignUp() {
   const form = useForm<FormValues>();
   const { register, control, handleSubmit, formState, getValues } = form;
   const navigate = useNavigate();
+  const { loading, isSignedUp } = useAppSelector((state) => state.user);
 
+  useEffect(() => {
+    if (isSignedUp) {
+      navigate("/login");
+    }
+  });
   const dispatch = useAppDispatch();
 
   const onSubmit = async (formValues: FormValues) => {
-    /* TODO navigate to login upon successful sign up */
+    /* TODO */
     await dispatch(
       signUp({
         username: formValues.username,
@@ -118,7 +125,11 @@ export function SignUp() {
           </div>
           <div className="field">
             <div className="buttons is-centered">
-              <button type="submit" className="button is-white" id="login">
+              <button
+                type="submit"
+                className={`button is-white ${loading ? "is-loading" : ""}`}
+                id="login"
+              >
                 SignUp
               </button>
             </div>
