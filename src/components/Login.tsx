@@ -13,7 +13,7 @@ type FormValues = {
 export function Login() {
   const form = useForm<FormValues>();
   const { register, control, handleSubmit, formState } = form;
-  const { isLoggedIn, username } = useAppSelector((state) => state.user);
+  const { isLoggedIn, username, loading } = useAppSelector((state) => state.user);
 
   const navigate = useNavigate();
 
@@ -87,7 +87,7 @@ export function Login() {
             </div>
             <div className="field">
               <div className="buttons is-centered">
-                <button type="submit" className="button is-white" id="login">
+                <button type="submit" className={`button is-white ${loading ?  'is-loading': ''}`} id="login">
                   Login
                 </button>
               </div>

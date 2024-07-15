@@ -8,6 +8,9 @@ interface UserState {
   username: string;
   token: string;
   userId: string;
+  error: string;
+  loading: boolean;
+  isSignedUp: boolean;
 }
 
 const initialState: UserState = {
@@ -15,6 +18,9 @@ const initialState: UserState = {
   username: "",
   token: "",
   userId: "",
+  error: "",
+  loading: false,
+  isSignedUp: false,
 };
 
 export const signIn = createAsyncThunk(
@@ -49,9 +55,28 @@ const userSlice = createSlice({
       state.username = action.payload.username;
       state.token = action.payload.accessToken;
       state.userId = action.payload.userId;
+      state.error = "";
+      state.loading = false;
+      state.isSignedUp = false;
     });
-    builder.addCase(signUp.fulfilled, (state, action) => {
+    builder.addCase(signIn.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(signIn.rejected, (state, action) => {
+      state.error = action.error.message || 'Error signing in';
+    });
+    builder.addCase(signUp.fulfilled, (state) => {
       state = initialState;
+      state.isSignedUp = true
+    });
+
+    builder.addCase(signUp.pending, (state) => {
+      state = initialState;
+      state.loading = true
+    });
+    builder.addCase(signUp.rejected, (state, action) => {
+      state = initialState;
+      state.error = action.error.message || 'Error signing up'
     });
   },
 });
