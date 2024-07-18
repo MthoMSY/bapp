@@ -25,7 +25,6 @@ export function SignUp() {
   const dispatch = useAppDispatch();
 
   const onSubmit = async (formValues: FormValues) => {
-    /* TODO */
     await dispatch(
       signUp({
         username: formValues.username,

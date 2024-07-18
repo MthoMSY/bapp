@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
 import { api } from "../../api";
 import { act } from "react";
+import { Budget } from "../../types/budget";
 
 interface UserState {
   isLoggedIn: boolean;
@@ -10,7 +11,9 @@ interface UserState {
   userId: string;
   error: string;
   loading: boolean;
+  isLoadingBudgets: boolean
   isSignedUp: boolean;
+  budgets: Budget[];
 }
 
 const initialState: UserState = {
@@ -21,6 +24,8 @@ const initialState: UserState = {
   error: "",
   loading: false,
   isSignedUp: false,
+  isLoadingBudgets: false,
+  budgets: [],
 };
 
 export const signIn = createAsyncThunk(
@@ -36,6 +41,19 @@ export const signUp = createAsyncThunk(
   "user/signup",
   async (request: { username: string; password: string }) => {
     const response = await api.post("/auth/signup", request);
+
+    return response.data;
+  }
+);
+
+export const fetchBudgets = createAsyncThunk(
+  "user/budgets/all",
+  async (request: { token: string }) => {
+    const response = await api.get("/budget", {
+      headers: {
+        Authorization: `Bearer ${request.token}`,
+      },
+    });
 
     return response.data;
   }
@@ -63,20 +81,32 @@ const userSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(signIn.rejected, (state, action) => {
-      state.error = action.error.message || 'Error signing in';
+      state.error = action.error.message || "Error signing in";
     });
     builder.addCase(signUp.fulfilled, (state) => {
       state = initialState;
-      state.isSignedUp = true
+      state.isSignedUp = true;
     });
 
     builder.addCase(signUp.pending, (state) => {
       state = initialState;
-      state.loading = true
+      state.loading = true;
     });
     builder.addCase(signUp.rejected, (state, action) => {
       state = initialState;
-      state.error = action.error.message || 'Error signing up'
+      state.error = action.error.message || "Error signing up";
+    });
+    builder.addCase(fetchBudgets.rejected, (state) => {
+      state.isLoadingBudgets = false
+    });
+    builder.addCase(fetchBudgets.fulfilled, (state, action) => {
+      state.budgets = action.payload.map((budget: Budget) => {
+        return { ...budget };
+      });
+      state.isLoadingBudgets = false
+    });
+    builder.addCase(fetchBudgets.pending, (state) => {
+      state.isLoadingBudgets = true;
     });
   },
 });

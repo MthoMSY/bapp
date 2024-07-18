@@ -6,7 +6,7 @@ import { store } from "./store";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { SignUp } from "./components/SignUp";
 import { Login } from "./components/Login";
-import { Dashboard } from "./components/Dashboard";
+import { Budgets } from "./components/Budgets";
 
 const router = createBrowserRouter([
   {
@@ -25,8 +25,8 @@ const router = createBrowserRouter([
       },
       //dynamic path
       {
-        path: "/:userId/dashboard",
-        element: <Dashboard />,
+        path: "/:username/budgets",
+        element: <Budgets />,
       },
     ]
   },
