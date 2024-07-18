@@ -1,18 +1,40 @@
-import { useEffect } from "react";
+import React, { useMemo } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { fetchBudgets } from "../features/user/userSlice";
+import { Budget } from "../types/budget";
 
 export const Budgets = () => {
-  const capitalizeFirstLetter = (s: string): string => {
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  };
   const { budgets, username, token } = useAppSelector((state) => state.user);
+
+  const [displayBudgets, setDisplayBudgets] = useState<Budget[]>(budgets);
+  const [searchString, setSearchString] = useState<string>("");
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(fetchBudgets({ token }));
   }, [username]);
+
+  useEffect(() => {
+    setDisplayBudgets(budgets);
+  }, [budgets]);
+
+  const capitalizeFirstLetter = (s: string): string => {
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  };
+
+  useMemo(() => {
+    if (searchString === "") setDisplayBudgets(budgets);
+
+    const searchResult = budgets.filter(
+      (budget) =>
+        budget.name.toLowerCase().includes(searchString.toLowerCase()) ||
+        budget.description.toLowerCase().includes(searchString.toLowerCase())
+    );
+
+    setDisplayBudgets(searchResult);
+  }, [searchString]);
 
   return (
     <div className="container is-fluid">
@@ -22,27 +44,38 @@ export const Budgets = () => {
         )}! Here are your budgets.`}</p>
         <div className="panel-block">
           <p className="control has-icons-left">
-            <input className="input" type="text" placeholder="Search" />
+            <input
+              value={searchString}
+              className="input"
+              onChange={(e) => {
+                setSearchString(e.target.value);
+              }}
+              type="text"
+              placeholder="Search"
+            />
             <span className="icon is-left">
               <i className="fas fa-search" aria-hidden="true"></i>
             </span>
           </p>
         </div>
-        {budgets.map((budget) => {
+        {displayBudgets.map((budget) => {
           return (
-            <>
+            <React.Fragment key={budget.id}>
               <a className="panel-block is-active">
                 <span className="panel-icon">
                   <i className="fas fa-chart-line"></i>
                 </span>
                 {budget.name}
               </a>
-            </>
+            </React.Fragment>
           );
         })}
 
         <div className="panel-block">
-          <button className="button is-link is-outlined is-fullwidth">
+          <button
+            onClick={() => setSearchString("")}
+            className="button is-link is-outlined is-fullwidth"
+          >
             Reset all filters
           </button>
         </div>
