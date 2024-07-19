@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
 import { api } from "../../api";
-import { act } from "react";
 import { Budget } from "../../types/budget";
 
 interface UserState {

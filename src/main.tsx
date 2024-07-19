@@ -8,6 +8,7 @@ import { SignUp } from "./components/SignUp";
 import { Login } from "./components/Login";
 import { Budgets } from "./components/Budgets";
 import { PageNotFound } from "./components/PageNotFound";
+import { BudgetItems } from "./components/BudgetItems";
 
 const router = createBrowserRouter([
   {
@@ -29,6 +30,11 @@ const router = createBrowserRouter([
         path: "/:username/budgets",
         element: <Budgets />,
       },
+        {
+          path: "/budgets/items",
+          // path: "/budget/:budgetId/items",
+          element: <BudgetItems />,
+        },
       {
         path: "*",
         element: <PageNotFound />,

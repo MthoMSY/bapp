@@ -1,41 +1,40 @@
 import React, { useMemo } from "react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchBudgets } from "../features/user/userSlice";
-import { Budget } from "../types/budget";
-import { useNavigate } from "react-router-dom";
+import { Item } from "../types/item";
+import { fetchItems } from "../features/user/itemSlice";
 
-export const Budgets = () => {
-  const { budgets, username, token } = useAppSelector((state) => state.user);
+export const BudgetItems = () => {
+  const { items } = useAppSelector((state) => state.items);
+  const { username, token } = useAppSelector((state) => state.user);
 
-  const [displayBudgets, setDisplayBudgets] = useState<Budget[]>(budgets);
+  const [displayItems, setDisplayItems] = useState<Item[]>(items);
   const [searchString, setSearchString] = useState<string>("");
-  const navigate = useNavigate()
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchBudgets({ token }));
+    dispatch(fetchItems({ token }));
   }, [username]);
 
   useEffect(() => {
-    setDisplayBudgets(budgets);
-  }, [budgets]);
+    setDisplayItems(items);
+  }, [items]);
 
   const capitalizeFirstLetter = (s: string): string => {
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
 
   useMemo(() => {
-    if (searchString === "") setDisplayBudgets(budgets);
+    if (searchString === "") setDisplayItems(items);
 
-    const searchResult = budgets.filter(
-      (budget) =>
-        budget.name.toLowerCase().includes(searchString.toLowerCase()) ||
-        budget.description.toLowerCase().includes(searchString.toLowerCase())
+    const searchResult = items.filter(
+      (item) =>
+        item.name.toLowerCase().includes(searchString.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchString.toLowerCase())
     );
 
-    setDisplayBudgets(searchResult);
+    setDisplayItems(searchResult);
   }, [searchString]);
 
   return (
@@ -43,7 +42,7 @@ export const Budgets = () => {
       <nav className="panel is-link">
         <p className="panel-heading has-text-centered">{`Hey ${capitalizeFirstLetter(
           username
-        )}! Here are your budgets.`}</p>
+        )}! Here are your items.`}</p>
         <div className="panel-block">
           <p className="control has-icons-left">
             <input
@@ -60,14 +59,14 @@ export const Budgets = () => {
             </span>
           </p>
         </div>
-        {displayBudgets.map((budget) => {
+        {displayItems.map((item) => {
           return (
-            <React.Fragment key={budget.id}>
-              <a className="panel-block is-active" onClick={() => navigate('/budgets/items')}>
+            <React.Fragment key={item.id}>
+              <a className="panel-block is-active">
                 <span className="panel-icon">
                   <i className="fas fa-chart-line"></i>
                 </span>
-                {budget.name}
+                {item.name}
               </a>
             </React.Fragment>
           );
