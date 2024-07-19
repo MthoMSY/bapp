@@ -7,6 +7,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { SignUp } from "./components/SignUp";
 import { Login } from "./components/Login";
 import { Budgets } from "./components/Budgets";
+import { PageNotFound } from "./components/PageNotFound";
 
 const router = createBrowserRouter([
   {
@@ -18,7 +19,7 @@ const router = createBrowserRouter([
         path: "/signup",
         element: <SignUp />,
       },
-    
+
       {
         path: "/login",
         element: <Login />,
@@ -28,9 +29,12 @@ const router = createBrowserRouter([
         path: "/:username/budgets",
         element: <Budgets />,
       },
-    ]
+      {
+        path: "*",
+        element: <PageNotFound />,
+      },
+    ],
   },
-
 ]);
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
