@@ -15,6 +15,8 @@ interface UserState {
   budgets: Budget[];
 }
 
+const userToken = localStorage.getItem('userToken')
+
 const initialState: UserState = {
   isLoggedIn: false,
   username: "",

@@ -9,6 +9,7 @@ import { Login } from "./components/Login";
 import { Budgets } from "./components/Budgets";
 import { PageNotFound } from "./components/PageNotFound";
 import { BudgetItems } from "./components/BudgetItems";
+import { ProtectedRoute } from "./auth/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -25,16 +26,20 @@ const router = createBrowserRouter([
         path: "/login",
         element: <Login />,
       },
-      //dynamic path
       {
-        path: "/:username/budgets",
-        element: <Budgets />,
+        element: <ProtectedRoute />,
+        children: [
+          {
+            path: "/:username/budgets",
+            element: <Budgets />,
+          },
+          {
+            path: "/budgets/items",
+            // path: "/budget/:budgetId/items",
+            element: <BudgetItems />,
+          },
+        ],
       },
-        {
-          path: "/budgets/items",
-          // path: "/budget/:budgetId/items",
-          element: <BudgetItems />,
-        },
       {
         path: "*",
         element: <PageNotFound />,
@@ -46,7 +51,6 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-      {/* <App /> */}
       <RouterProvider router={router} />
     </Provider>
   </React.StrictMode>
