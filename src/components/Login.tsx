@@ -27,7 +27,7 @@ export function Login() {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate(`/${username.toLocaleLowerCase()}/budgets`, { replace: true });
+      navigate(`/${username.toLocaleLowerCase()}/budget`, { replace: true });
     }
   }, [isLoggedIn, navigate]);
 

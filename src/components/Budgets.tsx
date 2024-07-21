@@ -63,7 +63,7 @@ export const Budgets = () => {
         {displayBudgets.map((budget) => {
           return (
             <React.Fragment key={budget.id}>
-              <a className="panel-block is-active" onClick={() => navigate('/budgets/items')}>
+              <a className="panel-block is-active" onClick={() => navigate(`/budget/${budget.id}/item`)}>
                 <span className="panel-icon">
                   <i className="fas fa-chart-line"></i>
                 </span>

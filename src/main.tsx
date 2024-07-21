@@ -30,12 +30,11 @@ const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
-            path: "/:username/budgets",
+            path: "/:username/budget",
             element: <Budgets />,
           },
           {
-            path: "/budgets/items",
-            // path: "/budget/:budgetId/items",
+            path: "/budget/:id/item",
             element: <BudgetItems />,
           },
         ],

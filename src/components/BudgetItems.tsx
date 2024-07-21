@@ -3,13 +3,19 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { Item } from "../types/item";
 import { fetchItems } from "../features/user/itemSlice";
+import { useParams } from "react-router-dom";
+import { Budget } from "../types/budget";
 
 export const BudgetItems = () => {
-  const { items } = useAppSelector((state) => state.items);
+  const { budgets } = useAppSelector((state) => state.user);
+  const { id } = useParams();
   const { username, token } = useAppSelector((state) => state.user);
 
-  const [displayItems, setDisplayItems] = useState<Item[]>(items);
+  const [displayItems, setDisplayItems] = useState<Item[]>([]);
   const [searchString, setSearchString] = useState<string>("");
+  const [budget, setBudget] = useState<Budget | undefined>(
+    budgets.find((budget) => budget.id === id)
+  );
 
   const dispatch = useAppDispatch();
 
@@ -17,18 +23,16 @@ export const BudgetItems = () => {
     dispatch(fetchItems({ token }));
   }, [username]);
 
-  useEffect(() => {
-    setDisplayItems(items);
-  }, [items]);
-
   const capitalizeFirstLetter = (s: string): string => {
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
 
   useMemo(() => {
-    if (searchString === "") setDisplayItems(items);
+    if (!budget) return;
 
-    const searchResult = items.filter(
+    if (searchString === "") setDisplayItems(budget.items);
+
+    const searchResult = budget.items.filter(
       (item) =>
         item.name.toLowerCase().includes(searchString.toLowerCase()) ||
         item.description.toLowerCase().includes(searchString.toLowerCase())
@@ -40,9 +44,7 @@ export const BudgetItems = () => {
   return (
     <div className="container is-fluid">
       <nav className="panel is-link">
-        <p className="panel-heading has-text-centered">{`Hey ${capitalizeFirstLetter(
-          username
-        )}! Here are your items.`}</p>
+        <p className="panel-heading has-text-centered">{budget?.name || ''}</p>
         <div className="panel-block">
           <p className="control has-icons-left">
             <input
