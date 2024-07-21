@@ -23,6 +23,7 @@ export const BudgetItems = () => {
     dispatch(fetchItems({ token }));
   }, [username]);
 
+  // todo make use of this function
   const capitalizeFirstLetter = (s: string): string => {
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
