@@ -25,6 +25,7 @@ export function SignUp() {
   const dispatch = useAppDispatch();
 
   const onSubmit = async (formValues: FormValues) => {
+    console.log(formValues);
     await dispatch(
       signUp({
         username: formValues.username,
@@ -140,7 +141,7 @@ export function SignUp() {
             <button
               className="button is-ghost"
               onClick={() => {
-                console.log("navigate to login");
+                navigate("/login");
               }}
             >
               Already have an account?

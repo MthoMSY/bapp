@@ -10,7 +10,7 @@ interface UserState {
   userId: string;
   error: string;
   loading: boolean;
-  isLoadingBudgets: boolean
+  isLoadingBudgets: boolean;
   isSignedUp: boolean;
   budgets: Budget[];
 }
@@ -61,6 +61,22 @@ export const fetchBudgets = createAsyncThunk(
   }
 );
 
+export const createBudget = createAsyncThunk(
+  "user/budget/",
+  async (request: {
+    payload: { name: string; description: string };
+    token: string;
+  }) => {
+    const response = await api.post("/budget", request.payload, {
+      headers: {
+        Authorization: `Bearer ${request.token}`,
+      },
+    });
+
+    return response.data;
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -83,32 +99,41 @@ const userSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(signIn.rejected, (state, action) => {
+      // show some toast message
       state.error = action.error.message || "Error signing in";
+      state.loading = false;
     });
     builder.addCase(signUp.fulfilled, (state) => {
-      state = initialState;
       state.isSignedUp = true;
+      state.loading = false;
     });
 
     builder.addCase(signUp.pending, (state) => {
-      state = initialState;
       state.loading = true;
     });
     builder.addCase(signUp.rejected, (state, action) => {
-      state = initialState;
+      state = { ...initialState };
       state.error = action.error.message || "Error signing up";
     });
     builder.addCase(fetchBudgets.rejected, (state) => {
-      state.isLoadingBudgets = false
+      state.isLoadingBudgets = false;
     });
     builder.addCase(fetchBudgets.fulfilled, (state, action) => {
       state.budgets = action.payload.map((budget: Budget) => {
         return { ...budget };
       });
-      state.isLoadingBudgets = false
+      state.isLoadingBudgets = false;
     });
     builder.addCase(fetchBudgets.pending, (state) => {
       state.isLoadingBudgets = true;
+    });
+    builder.addCase(createBudget.fulfilled, (state, action) => {
+      const newBudget = action.payload as Budget;
+      state.budgets.push(newBudget);
+    });
+    builder.addCase(createBudget.rejected, (state, action) => {
+      state.error =
+        action.error.message || "Error occurred when creating budget";
     });
   },
 });
