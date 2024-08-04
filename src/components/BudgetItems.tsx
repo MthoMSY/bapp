@@ -44,8 +44,38 @@ export const BudgetItems = () => {
 
   return (
     <div className="container is-fluid">
+      <nav className="navbar" role="navigation" aria-label="main navigation">
+        <div className="navbar-end">
+          <div className="navbar-item">
+            <button
+              className="button is-danger is-outlined"
+              onClick={() => console.log("remove item confirmation model")}
+            >
+              <span className="icon">
+                <i className="fas fa-minus-square"></i>
+              </span>
+              <span>
+                <strong>Remove</strong>
+              </span>
+            </button>
+          </div>
+          <div className="navbar-item">
+            <button
+              className="button is-link is-outlined"
+              onClick={() => console.log("add item model")}
+            >
+              <span className="icon">
+                <i className="fas fa-plus-square"></i>
+              </span>
+              <span>
+                <strong>Add</strong>
+              </span>
+            </button>
+          </div>
+        </div>
+      </nav>
       <nav className="panel is-link">
-        <p className="panel-heading has-text-centered">{budget?.name || ''}</p>
+        <p className="panel-heading has-text-centered">{budget?.name || ""}</p>
         <div className="panel-block">
           <p className="control has-icons-left">
             <input
