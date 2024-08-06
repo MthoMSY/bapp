@@ -8,31 +8,35 @@ export const ProtectedRoute = () => {
   const dispatch = useAppDispatch()
   const navigate = useNavigate();
 
-  const isTokenExpired = (token: string | null) => {
-    if (!token) return true;
+  const getDecodedToken = (token: string | null): {isExpired: boolean, payload: JwtPayload} => {
+    const expiredResult = {isExpired: true, payload: {}}
+    if (!token) return expiredResult;
     try {
-      const decodedToken = getDecodedToken(token)
+      const decodedToken = jwtDecode(token)
       const currentTime = Date.now() / 1000;
-      return decodedToken.exp && decodedToken.exp < currentTime;
+      const isExpired = decodedToken.exp && decodedToken.exp < currentTime;
+
+      if(isExpired){
+        return {isExpired: true, payload: {}}
+      }
+
+      return {isExpired: false, payload: decodedToken}
     } catch (error) {
       console.error(`Could not decode token: ${token}`);
-      return true;
+      return expiredResult;
     }
   };
 
-  const getDecodedToken = (token: string): JwtPayload => {
-    const decodedToken = jwtDecode(token)
-    return decodedToken
-  }
+
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (isTokenExpired(token)) {
+    const decodedToken = getDecodedToken(token)
+    if (decodedToken.isExpired) {
       navigate("/login");
     }
     else {
-        const decodedToken = getDecodedToken(token!!)
-        dispatch(restoreLoginFromLocalStorage({token, username: decodedToken.username}))
+        dispatch(restoreLoginFromLocalStorage({token, ...decodedToken.payload}))
     }
   });
   return <Outlet />;

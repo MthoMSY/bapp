@@ -15,9 +15,6 @@ interface UserState {
   budgets: Budget[];
 }
 
-// Todo: session management with token
-// const userToken = localStorage.getItem('userToken')
-
 const initialState: UserState = {
   isLoggedIn: false,
   username: "",
