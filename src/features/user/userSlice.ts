@@ -83,6 +83,12 @@ const userSlice = createSlice({
   reducers: {
     signOut: (state) => {
       state = initialState;
+      localStorage.removeItem("token");
+    },
+    restoreLoginFromLocalStorage: (state, action) => {
+      state.token = action.payload.token;
+      state.username = action.payload.username;
+      state.isLoggedIn = true;
     },
   },
   extraReducers: (builder) => {
@@ -94,6 +100,7 @@ const userSlice = createSlice({
       state.error = "";
       state.loading = false;
       state.isSignedUp = false;
+      localStorage.setItem("token", state.token);
     });
     builder.addCase(signIn.pending, (state) => {
       state.loading = true;
@@ -138,7 +145,8 @@ const userSlice = createSlice({
   },
 });
 
-export const { signOut } = userSlice.actions;
+export const { signOut, restoreLoginFromLocalStorage } =
+  userSlice.actions;
 
 export const selectLoggedInUser = (state: RootState) => state.user;
 
