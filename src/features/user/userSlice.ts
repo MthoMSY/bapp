@@ -73,6 +73,21 @@ export const createBudget = createAsyncThunk(
     return response.data;
   }
 );
+export const createBudgetItem = createAsyncThunk(
+  "user/item/budget",
+  async (request: {
+    payload: { name: string; description: string ; cost: number; budgetId: string};
+    token: string;
+  }) => {
+    const response = await api.post("/item/budget", request.payload, {
+      headers: {
+        Authorization: `Bearer ${request.token}`,
+      },
+    });
+
+    return response.data;
+  }
+);
 
 const userSlice = createSlice({
   name: "user",
