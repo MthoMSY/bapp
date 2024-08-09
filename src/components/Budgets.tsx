@@ -29,6 +29,9 @@ export const Budgets = () => {
   const capitalizeFirstLetter = (s: string): string => {
     return s.charAt(0).toUpperCase() + s.slice(1);
   };
+  const sanitizeBudgetNameForUrl = (s: string): string => {
+    return s.toLowerCase().trim().replaceAll(" ", "_");
+  };
 
   useMemo(() => {
     if (searchString === "") setDisplayBudgets(budgets);
@@ -44,7 +47,9 @@ export const Budgets = () => {
 
   return (
     <>
-      {showCreateBudgetModal && <BudgetModal setShowModal={setShowCreateBudgetModal}/>}
+      {showCreateBudgetModal && (
+        <BudgetModal setShowModal={setShowCreateBudgetModal} />
+      )}
       <div className="container is-fluid">
         <nav className="navbar" role="navigation" aria-label="main navigation">
           <div className="navbar-end">
@@ -88,7 +93,14 @@ export const Budgets = () => {
               <React.Fragment key={budget.id}>
                 <a
                   className="panel-block is-active"
-                  onClick={() => navigate(`/budget/${budget.id}/item`)}
+                  onClick={() =>
+                    navigate(
+                      `/budget/${sanitizeBudgetNameForUrl(budget.name)}/items`,
+                      {
+                        state: { id: budget.id },
+                      }
+                    )
+                  }
                 >
                   <span className="panel-icon">
                     <i className="fas fa-chart-line"></i>

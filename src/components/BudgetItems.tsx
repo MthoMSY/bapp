@@ -3,20 +3,21 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { Item } from "../types/item";
 import { fetchItems } from "../features/user/itemSlice";
-import { useParams } from "react-router-dom";
 import { Budget } from "../types/budget";
 import AddItemModal from "./AddItemModal";
+import { useLocation } from "react-router-dom";
 
 export const BudgetItems = () => {
   const { budgets } = useAppSelector((state) => state.user);
-  const { id } = useParams();
+  const location = useLocation();
+  const { id } = location.state;
   const { username, token } = useAppSelector((state) => state.user);
 
   const [displayItems, setDisplayItems] = useState<Item[]>([]);
   const [searchString, setSearchString] = useState<string>("");
   const [showAddItemModal, setShowAddItemModal] = useState<boolean>(false);
 
-  const [budget, setBudget] = useState<Budget | undefined>(
+  const [budget] = useState<Budget | undefined>(
     budgets.find((budget) => budget.id === id)
   );
 
@@ -25,11 +26,6 @@ export const BudgetItems = () => {
   useEffect(() => {
     dispatch(fetchItems({ token }));
   }, [username]);
-
-  // todo make use of this function
-  const capitalizeFirstLetter = (s: string): string => {
-    return s.charAt(0).toUpperCase() + s.slice(1);
-  };
 
   useMemo(() => {
     if (!budget) return;
