@@ -6,6 +6,7 @@ import { fetchItems } from "../features/user/itemSlice";
 import { Budget } from "../types/budget";
 import AddItemModal from "./AddItemModal";
 import { useLocation } from "react-router-dom";
+import ItemDisplay from "./ItemDisplay";
 
 export const BudgetItems = () => {
   const { budgets } = useAppSelector((state) => state.user);
@@ -48,6 +49,24 @@ export const BudgetItems = () => {
       )}
       <div className="container is-fluid">
         <nav className="navbar" role="navigation" aria-label="main navigation">
+          <div className="navbar-start">
+            <div className="navbar-item">
+              <p className="control has-icons-left">
+                <input
+                  value={searchString}
+                  className="input"
+                  onChange={(e) => {
+                    setSearchString(e.target.value);
+                  }}
+                  type="text"
+                  placeholder="Search"
+                />
+                <span className="icon is-left">
+                  <i className="fas fa-search" aria-hidden="true"></i>
+                </span>
+              </p>
+            </div>
+          </div>
           <div className="navbar-end">
             <div className="navbar-item">
               <button
@@ -77,46 +96,22 @@ export const BudgetItems = () => {
             </div>
           </div>
         </nav>
-        <nav className="panel is-link">
-          <p className="panel-heading has-text-centered">
-            {budget?.name || ""}
-          </p>
-          <div className="panel-block">
-            <p className="control has-icons-left">
-              <input
-                value={searchString}
-                className="input"
-                onChange={(e) => {
-                  setSearchString(e.target.value);
-                }}
-                type="text"
-                placeholder="Search"
-              />
-              <span className="icon is-left">
-                <i className="fas fa-search" aria-hidden="true"></i>
-              </span>
-            </p>
+        <nav className="level">
+          <div className="level-item has-text-centered">
+            <p className="title">{budget?.name || ""}</p>
           </div>
-          {displayItems.map((item) => {
-            return (
-              <React.Fragment key={item.id}>
-                <a className="panel-block is-active">
-                  <span className="panel-icon">
-                    <i className="fas fa-chart-line"></i>
-                  </span>
-                  {item.name}
-                </a>
-              </React.Fragment>
-            );
-          })}
-
-          <div className="panel-block">
-            <button
-              onClick={() => setSearchString("")}
-              className="button is-link is-outlined is-fullwidth"
-            >
-              Reset all filters
-            </button>
+        </nav>
+        <ItemDisplay items={displayItems} />
+        <nav>
+          <div className="level">
+            <div className="level-item">
+              <button
+                onClick={() => setSearchString("")}
+                className="button is-link is-outlined is-fullwidth"
+              >
+                Reset all filters
+              </button>
+            </div>
           </div>
         </nav>
       </div>
