@@ -118,7 +118,6 @@ const userSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(signIn.rejected, (state, action) => {
-      // show some toast message
       state.error = action.error.message || "Error signing in";
       state.loading = false;
     });
@@ -131,7 +130,7 @@ const userSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(signUp.rejected, (state, action) => {
-      state = { ...initialState };
+      state.loading = false
       state.error = action.error.message || "Error signing up";
     });
     builder.addCase(fetchBudgets.rejected, (state) => {

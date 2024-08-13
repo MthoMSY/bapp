@@ -4,6 +4,8 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signUp } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
+import { globalToastOptions } from "../notifications";
 
 type FormValues = {
   username: string;
@@ -24,14 +26,20 @@ export function SignUp() {
   });
   const dispatch = useAppDispatch();
 
-  const onSubmit = async (formValues: FormValues) => {
-    console.log(formValues);
-    await dispatch(
+  const onSubmit = (formValues: FormValues) => {
+    dispatch(
       signUp({
         username: formValues.username,
         password: formValues.confirmedPassword,
       })
-    );
+    )
+      .unwrap()
+      .then(() => {
+        toast.success(
+          `Congratulations ${formValues.username}, you have successfully signed up!`,
+          globalToastOptions
+        );
+      }).catch(() => toast.error("There was error signing you up, note that username must be unique", globalToastOptions));
   };
 
   const { errors } = formState;
