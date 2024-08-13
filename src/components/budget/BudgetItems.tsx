@@ -1,12 +1,12 @@
 import React, { useMemo } from "react";
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { Item } from "../types/item";
-import { fetchItems } from "../features/user/itemSlice";
-import { Budget } from "../types/budget";
-import AddItemModal from "./AddItemModal";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { Item } from "../../types/item";
+import { fetchItems } from "../../features/user/itemSlice";
+import { Budget } from "../../types/budget";
 import { useLocation } from "react-router-dom";
-import ItemDisplay from "./ItemDisplay";
+import ItemDisplay from "./item/ItemDisplay";
+import AddItemModal from "./item/AddItemModal";
 
 export const BudgetItems = () => {
   const { budgets } = useAppSelector((state) => state.user);

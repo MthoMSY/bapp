@@ -6,10 +6,10 @@ import { store } from "./store";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { SignUp } from "./components/SignUp";
 import { Login } from "./components/Login";
-import { Budgets } from "./components/Budgets";
 import { PageNotFound } from "./components/PageNotFound";
-import { BudgetItems } from "./components/BudgetItems";
+import { BudgetItems } from "./components/budget/BudgetItems";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
+import { Budgets } from "./components/budget/Budgets";
 
 const router = createBrowserRouter([
   {

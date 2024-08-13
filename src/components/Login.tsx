@@ -4,6 +4,9 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signIn } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
+import { globalToastOptions } from "../notifications";
 
 type FormValues = {
   username: string;
@@ -22,7 +25,14 @@ export function Login() {
   const dispatch = useAppDispatch();
 
   const onSubmit = (formValues: FormValues) => {
-    dispatch(signIn(formValues));
+    dispatch(signIn(formValues))
+      .unwrap()
+      .then(() => {
+        toast.success(`Successfully logged in!`, globalToastOptions);
+      })
+      .catch(() => {
+        toast.error("Invalid user credentials", globalToastOptions);
+      });
   };
 
   useEffect(() => {

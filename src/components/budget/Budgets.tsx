@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
 import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { fetchBudgets } from "../features/user/userSlice";
-import { Budget } from "../types/budget";
 import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { Budget } from "../../types/budget";
+import { fetchBudgets } from "../../features/user/userSlice";
 import { BudgetModal } from "./BudgetModal";
 
 export const Budgets = () => {
