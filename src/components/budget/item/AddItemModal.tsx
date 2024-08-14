@@ -1,8 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { createBudgetItem } from "../../../features/user/userSlice";
 import { toast } from "react-toastify";
 import { globalToastOptions } from "../../../notifications";
+import { createBudgetItem } from "../../../features/budget/budgetSlice";
 
 interface Props {
   setShowModal: (show: boolean) => void;

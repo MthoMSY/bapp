@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Budget } from "../../types/budget";
-import { fetchBudgets } from "../../features/user/userSlice";
 import { BudgetModal } from "./CreateBudgetModal";
+import { fetchBudgets } from "../../features/budget/budgetSlice";
 
 export const Budgets = () => {
-  const { budgets, username, token } = useAppSelector((state) => state.user);
+  const { username, token } = useAppSelector((state) => state.user);
+  const {budgets} = useAppSelector((state) => state.budget)
 
   const [displayBudgets, setDisplayBudgets] = useState<Budget[]>(budgets);
   const [searchString, setSearchString] = useState<string>("");

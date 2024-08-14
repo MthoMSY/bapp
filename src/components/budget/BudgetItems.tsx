@@ -1,15 +1,13 @@
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Item } from "../../types/item";
-import { fetchItems } from "../../features/user/itemSlice";
-import { Budget } from "../../types/budget";
 import { useLocation, useParams } from "react-router-dom";
 import ItemDisplay from "./item/ItemDisplay";
 import AddItemModal from "./item/AddItemModal";
 import { toast } from "react-toastify";
 import { globalToastOptions } from "../../notifications";
-import { getBudgetItems } from "../../features/user/userSlice";
+import { getBudgetItems } from "../../features/budget/budgetSlice";
 
 export const BudgetItems = () => {
   const location = useLocation();
@@ -28,7 +26,7 @@ export const BudgetItems = () => {
     setSearchString("");
     dispatch(getBudgetItems({ budgetId: id, token }))
       .unwrap()
-      .then((data) => {
+      .then((data: Item[]) => {
         setItems(data);
         setDisplayItems(data);
       })
