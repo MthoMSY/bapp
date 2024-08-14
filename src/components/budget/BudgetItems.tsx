@@ -5,8 +5,6 @@ import { Item } from "../../types/item";
 import { useLocation, useParams } from "react-router-dom";
 import ItemDisplay from "./item/ItemDisplay";
 import AddItemModal from "./item/AddItemModal";
-import { toast } from "react-toastify";
-import { globalToastOptions } from "../../notifications";
 import { getBudgetItems } from "../../features/budget/budgetSlice";
 
 export const BudgetItems = () => {
@@ -23,6 +21,7 @@ export const BudgetItems = () => {
   const dispatch = useAppDispatch();
 
   const updateItems = () => {
+    if (!token) return;
     setSearchString("");
     dispatch(getBudgetItems({ budgetId: id, token }))
       .unwrap()
@@ -30,12 +29,12 @@ export const BudgetItems = () => {
         setItems(data);
         setDisplayItems(data);
       })
-      .catch(() =>
-        toast.error(
-          `Error fetching items for budget: ${budgetName}`,
-          globalToastOptions
-        )
-      );
+      .catch((error) => {
+        console.error(
+          `Error fetching items for budget: ${budgetName} ${error.code}`
+        );
+        console.error(`${JSON.stringify(error)}`);
+      });
   };
 
   useEffect(() => {
@@ -91,27 +90,14 @@ export const BudgetItems = () => {
           <div className="navbar-end">
             <div className="navbar-item">
               <button
-                className="button is-danger is-outlined"
-                onClick={() => console.log("remove item confirmation model")}
-              >
-                <span className="icon">
-                  <i className="fas fa-minus-square"></i>
-                </span>
-                <span>
-                  <strong>Remove</strong>
-                </span>
-              </button>
-            </div>
-            <div className="navbar-item">
-              <button
-                className="button is-link is-outlined"
+                className="button is-link is-outlined is-fullwidth"
                 onClick={() => setShowAddItemModal(true)}
               >
                 <span className="icon">
                   <i className="fas fa-plus-square"></i>
                 </span>
                 <span>
-                  <strong>Add</strong>
+                  <strong>Create</strong>
                 </span>
               </button>
             </div>

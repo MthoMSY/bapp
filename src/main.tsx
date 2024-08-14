@@ -10,13 +10,18 @@ import { PageNotFound } from "./components/PageNotFound";
 import { BudgetItems } from "./components/budget/BudgetItems";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 import { Budgets } from "./components/budget/Budgets";
+import { Home } from "./components/Home";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <App />,
+    errorElement: <Home />,
     children: [
+      {
+        path: "/home",
+        element: <Home />,
+      },
       {
         path: "/signup",
         element: <SignUp />,
@@ -36,7 +41,6 @@ const router = createBrowserRouter([
           {
             path: "/budget/:budgetName/items",
             element: <BudgetItems />,
-
           },
         ],
       },

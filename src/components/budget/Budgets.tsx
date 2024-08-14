@@ -8,7 +8,7 @@ import { fetchBudgets } from "../../features/budget/budgetSlice";
 
 export const Budgets = () => {
   const { username, token } = useAppSelector((state) => state.user);
-  const {budgets} = useAppSelector((state) => state.budget)
+  const { budgets } = useAppSelector((state) => state.budget);
 
   const [displayBudgets, setDisplayBudgets] = useState<Budget[]>(budgets);
   const [searchString, setSearchString] = useState<string>("");
@@ -20,6 +20,7 @@ export const Budgets = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    if (!token) return;
     dispatch(fetchBudgets({ token }));
   }, [username]);
 
