@@ -43,7 +43,12 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     signOut: (state) => {
-      state = initialState;
+      state.isLoggedIn = false;
+      state.token = "";
+      state.error = "";
+      state.loading = false;
+      state.userId = "";
+      state.username = ""
       localStorage.removeItem("token");
     },
     restoreLoginFromLocalStorage: (state, action) => {
