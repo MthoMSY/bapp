@@ -1,9 +1,12 @@
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { createBudgetItem } from "../../../features/user/userSlice";
+import { toast } from "react-toastify";
+import { globalToastOptions } from "../../../notifications";
 
 interface Props {
   setShowModal: (show: boolean) => void;
+  updateBudgetItems: () => void;
   budgetId: string;
 }
 
@@ -14,15 +17,26 @@ type FormValues = {
 };
 
 const AddItemModal = (props: Props) => {
-  const { setShowModal, budgetId } = props;
+  const { setShowModal, budgetId, updateBudgetItems } = props;
   const { token } = useAppSelector((state) => state.user);
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
   const form = useForm<FormValues>();
   const { register, handleSubmit, formState } = form;
 
   const onConfirm = (formValues: FormValues) => {
-    dispatch(createBudgetItem({ token, payload: { ...formValues, budgetId } }));
-    setShowModal(false);
+    dispatch(createBudgetItem({ token, payload: { ...formValues, budgetId } }))
+      .unwrap()
+      .then(() => {
+        toast.success(
+          `Successfully added ${formValues.name} to your budget`,
+          globalToastOptions
+        );
+        updateBudgetItems();
+      })
+      .catch(() => {
+        toast.error("Error adding item to your budget", globalToastOptions);
+      })
+      .finally(() => setShowModal(false));
   };
 
   const { errors } = formState;

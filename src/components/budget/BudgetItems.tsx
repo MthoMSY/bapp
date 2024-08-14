@@ -4,36 +4,53 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Item } from "../../types/item";
 import { fetchItems } from "../../features/user/itemSlice";
 import { Budget } from "../../types/budget";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import ItemDisplay from "./item/ItemDisplay";
 import AddItemModal from "./item/AddItemModal";
+import { toast } from "react-toastify";
+import { globalToastOptions } from "../../notifications";
+import { getBudgetItems } from "../../features/user/userSlice";
 
 export const BudgetItems = () => {
-  const { budgets } = useAppSelector((state) => state.user);
   const location = useLocation();
   const { id } = location.state;
+  const { budgetName } = useParams();
   const { username, token } = useAppSelector((state) => state.user);
 
+  const [items, setItems] = useState<Item[]>([]);
   const [displayItems, setDisplayItems] = useState<Item[]>([]);
   const [searchString, setSearchString] = useState<string>("");
   const [showAddItemModal, setShowAddItemModal] = useState<boolean>(false);
 
-  const [budget] = useState<Budget | undefined>(
-    budgets.find((budget) => budget.id === id)
-  );
-
   const dispatch = useAppDispatch();
 
+  const updateItems = () => {
+    setSearchString("");
+    dispatch(getBudgetItems({ budgetId: id, token }))
+      .unwrap()
+      .then((data) => {
+        setItems(data);
+        setDisplayItems(data);
+      })
+      .catch(() =>
+        toast.error(
+          `Error fetching items for budget: ${budgetName}`,
+          globalToastOptions
+        )
+      );
+  };
+
   useEffect(() => {
-    dispatch(fetchItems({ token }));
+    updateItems();
   }, [username]);
 
   useMemo(() => {
-    if (!budget) return;
+    if (searchString === "") {
+      setDisplayItems(items);
+      return;
+    }
 
-    if (searchString === "") setDisplayItems(budget.items);
-
-    const searchResult = budget.items.filter(
+    const searchResult = items.filter(
       (item) =>
         item.name.toLowerCase().includes(searchString.toLowerCase()) ||
         item.description.toLowerCase().includes(searchString.toLowerCase())
@@ -44,8 +61,14 @@ export const BudgetItems = () => {
 
   return (
     <>
-      {showAddItemModal && budget && (
-        <AddItemModal budgetId={budget.id} setShowModal={setShowAddItemModal} />
+      {showAddItemModal && (
+        <AddItemModal
+          budgetId={id}
+          setShowModal={setShowAddItemModal}
+          updateBudgetItems={async () => {
+            updateItems();
+          }}
+        />
       )}
       <div className="container is-fluid">
         <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -98,7 +121,7 @@ export const BudgetItems = () => {
         </nav>
         <nav className="level">
           <div className="level-item has-text-centered">
-            <p className="title">{budget?.name || ""}</p>
+            <p className="title">{budgetName || ""}</p>
           </div>
         </nav>
         <ItemDisplay items={displayItems} />

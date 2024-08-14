@@ -10,8 +10,9 @@ interface UserState {
   userId: string;
   error: string;
   loading: boolean;
+  // isSignedUp: boolean;
+  // budget stuff
   isLoadingBudgets: boolean;
-  isSignedUp: boolean;
   budgets: Budget[];
 }
 
@@ -22,7 +23,6 @@ const initialState: UserState = {
   userId: "",
   error: "",
   loading: false,
-  isSignedUp: false,
   isLoadingBudgets: false,
   budgets: [],
 };
@@ -73,10 +73,28 @@ export const createBudget = createAsyncThunk(
     return response.data;
   }
 );
+
+export const getBudgetItems = createAsyncThunk(
+  "user/budget/items",
+  async (request: { budgetId: string; token: string }) => {
+    const response = await api.get(`budget/${request.budgetId}/items`, {
+      headers: {
+        Authorization: `Bearer ${request.token}`,
+      },
+    });
+
+    return response.data;
+  }
+);
 export const createBudgetItem = createAsyncThunk(
   "user/item/budget",
   async (request: {
-    payload: { name: string; description: string ; cost: number; budgetId: string};
+    payload: {
+      name: string;
+      description: string;
+      cost: number;
+      budgetId: string;
+    };
     token: string;
   }) => {
     const response = await api.post("/item/budget", request.payload, {
@@ -111,7 +129,6 @@ const userSlice = createSlice({
       state.userId = action.payload.userId;
       state.error = "";
       state.loading = false;
-      state.isSignedUp = false;
       localStorage.setItem("token", state.token);
     });
     builder.addCase(signIn.pending, (state) => {
@@ -122,7 +139,6 @@ const userSlice = createSlice({
       state.loading = false;
     });
     builder.addCase(signUp.fulfilled, (state) => {
-      state.isSignedUp = true;
       state.loading = false;
     });
 
@@ -130,11 +146,12 @@ const userSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(signUp.rejected, (state, action) => {
-      state.loading = false
+      state.loading = false;
       state.error = action.error.message || "Error signing up";
     });
     builder.addCase(fetchBudgets.rejected, (state) => {
       state.isLoadingBudgets = false;
+      state.budgets = [];
     });
     builder.addCase(fetchBudgets.fulfilled, (state, action) => {
       state.budgets = action.payload.map((budget: Budget) => {
@@ -153,11 +170,23 @@ const userSlice = createSlice({
       state.error =
         action.error.message || "Error occurred when creating budget";
     });
+    builder.addCase(getBudgetItems.rejected, (state) => {
+      state.isLoadingBudgets = false;
+      state.budgets = [];
+    });
+    builder.addCase(getBudgetItems.fulfilled, (state, action) => {
+      state.budgets = action.payload.map((budget: Budget) => {
+        return { ...budget };
+      });
+      state.isLoadingBudgets = false;
+    });
+    builder.addCase(getBudgetItems.pending, (state) => {
+      state.isLoadingBudgets = true;
+    });
   },
 });
 
-export const { signOut, restoreLoginFromLocalStorage } =
-  userSlice.actions;
+export const { signOut, restoreLoginFromLocalStorage } = userSlice.actions;
 
 export const selectLoggedInUser = (state: RootState) => state.user;
 

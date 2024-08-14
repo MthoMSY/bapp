@@ -17,13 +17,7 @@ export function SignUp() {
   const form = useForm<FormValues>();
   const { register, control, handleSubmit, formState, getValues } = form;
   const navigate = useNavigate();
-  const { loading, isSignedUp } = useAppSelector((state) => state.user);
-
-  useEffect(() => {
-    if (isSignedUp) {
-      navigate("/login");
-    }
-  });
+  const { loading } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const onSubmit = (formValues: FormValues) => {
@@ -39,7 +33,14 @@ export function SignUp() {
           `Congratulations ${formValues.username}, you have successfully signed up!`,
           globalToastOptions
         );
-      }).catch(() => toast.error("There was error signing you up, note that username must be unique", globalToastOptions));
+        navigate("/login");
+      })
+      .catch(() =>
+        toast.error(
+          "There was error signing you up, note that username must be unique",
+          globalToastOptions
+        )
+      );
   };
 
   const { errors } = formState;
