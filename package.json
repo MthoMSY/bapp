@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "install:ci": "yarn --frozen-lockfile",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
