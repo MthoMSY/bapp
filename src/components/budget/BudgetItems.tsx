@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Item } from "../../types/item";
 import { useLocation, useParams } from "react-router-dom";
-import ItemDisplay from "./item/ItemDisplay";
+import ItemsDisplay from "./item/ItemDisplay";
 import AddItemModal from "./item/AddItemModal";
 import { getBudgetItems } from "../../features/budget/budgetSlice";
 
@@ -130,7 +130,7 @@ export const BudgetItems = () => {
             <p className="title">{budgetName || ""}</p>
           </div>
         </nav>
-        <ItemDisplay items={displayItems} />
+        <ItemsDisplay items={displayItems} />
       </div>
     </>
   );
