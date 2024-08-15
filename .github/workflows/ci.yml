@@ -1,0 +1,21 @@
+name: Continuous Integration Build
+
+on: 
+  push: 
+    branches: 
+      - main
+      - dev
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: actions/checkout@v4.1.7
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.9.0'
+      - run: npm i yarn -g 
+      - run: yarn install:ci
+      - run: yarn build
