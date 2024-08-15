@@ -123,7 +123,7 @@ export function Login() {
               <button
                 className="button is-text"
                 onClick={() => {
-                  console.log("Forgot my password");
+                  toast.warn("We don't have this capability yet", globalToastOptions)
                 }}
               >
                 Forgot your password?
