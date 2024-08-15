@@ -86,6 +86,28 @@ export const BudgetItems = () => {
                 </span>
               </p>
             </div>
+            <div className="navbar-item">
+              <div className="buttons">
+                <button className="button is-link is-outlined is-small">
+                  <span className="icon is-left">
+                    <i className="fas fa-filter"></i>
+                  </span>
+                  <span>Add filters</span>
+                </button>
+                <button
+                  onClick={() => {
+                    // todo: clear all filters
+                    setSearchString("");
+                  }}
+                  className="button is-warning is-outlined is-small"
+                >
+                  <span className="icon is-left">
+                    <i className="fas fa-power-off"></i>
+                  </span>
+                  <span>Reset all filters</span>
+                </button>
+              </div>
+            </div>
           </div>
           <div className="navbar-end">
             <div className="navbar-item">
@@ -109,18 +131,6 @@ export const BudgetItems = () => {
           </div>
         </nav>
         <ItemDisplay items={displayItems} />
-        <nav>
-          <div className="level">
-            <div className="level-item">
-              <button
-                onClick={() => setSearchString("")}
-                className="button is-link is-outlined is-fullwidth"
-              >
-                Reset all filters
-              </button>
-            </div>
-          </div>
-        </nav>
       </div>
     </>
   );
