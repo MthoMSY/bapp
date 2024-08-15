@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from "./hooks/redux";
 import { signOut } from "./features/user/userSlice";
 
 function App() {
-  const { isLoggedIn } = useAppSelector((state) => state.user);
+  const { isLoggedIn, username } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   return (
@@ -30,6 +30,17 @@ function App() {
                       <i className="fas fa-home"></i>
                     </span>
                     <strong>Home</strong>
+                  </a>
+                  <a
+                    className="button is-success is-light"
+                    onClick={() => {
+                      navigate("/about");
+                    }}
+                  >
+                    <span className="icon">
+                      <i className="fas fa-info"></i>
+                    </span>
+                    <strong>About</strong>
                   </a>
                 </div>
               </div>
@@ -57,6 +68,17 @@ function App() {
                   <div className="buttons">
                     <a
                       className="button is-link"
+                      onClick={() => {
+                        navigate(`/${username}/budgets`);
+                      }}
+                    >
+                      <span className="icon">
+                        <i className="fas fa-book"></i>
+                      </span>
+                      <strong>Budgets</strong>
+                    </a>
+                    <a
+                      className="button is-danger"
                       onClick={() => {
                         dispatch(signOut());
                         toast.success("Cheers!");
