@@ -42,6 +42,17 @@ function App() {
                     </span>
                     <strong>About</strong>
                   </a>
+                  <a
+                    className="button is-link is-light"
+                    onClick={() => {
+                      navigate("/blogs");
+                    }}
+                  >
+                    <span className="icon">
+                      <i className="fab fa-blogger"></i>
+                    </span>
+                    <strong>Blogs</strong>
+                  </a>
                 </div>
               </div>
             </div>
