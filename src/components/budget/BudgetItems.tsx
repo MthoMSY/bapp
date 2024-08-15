@@ -126,8 +126,16 @@ export const BudgetItems = () => {
           </div>
         </nav>
         <nav className="level">
-          <div className="level-item has-text-centered">
-            <p className="title">{budgetName || ""}</p>
+          <div className="level-left">
+            <div className="level-item">
+              <div className="tags are-medium">
+                <span className="tag is-info">{budgetName || ""}</span>
+                <span className="tag is-white">Budget Status: Good</span>
+                <span className="tag is-warning is-light">
+                  Budget Limit: R50 000
+                </span>
+              </div>
+            </div>
           </div>
         </nav>
         <ItemsDisplay items={displayItems} />
