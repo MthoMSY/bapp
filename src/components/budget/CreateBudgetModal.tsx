@@ -40,6 +40,9 @@ export function BudgetModal(props: Props) {
       <div className="modal-background"></div>
       <div className="modal-content">
         <div className="box">
+          <h2 className="subtitle has-text-centered">
+            <strong>Create Budget</strong>
+          </h2>
           <form onSubmit={handleSubmit(onConfirm)} noValidate>
             <div className="field">
               <label className="label"></label>
