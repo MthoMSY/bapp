@@ -11,6 +11,7 @@ import { BudgetItems } from "./components/budget/BudgetItems";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
 import { Budgets } from "./components/budget/Budgets";
 import { Home } from "./components/Home";
+import About from "./components/About";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <Home />,
     children: [
+      {
+        path: "/about",
+        element: <About />,
+      },
       {
         path: "/home",
         element: <Home />,

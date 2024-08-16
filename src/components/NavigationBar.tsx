@@ -9,7 +9,7 @@ const NavigationBar = () => {
   const navigate = useNavigate();
   return (
     <div className="container is-fluid">
-      <nav className="navbar" role="navigation" aria-label="main navigation">
+      <nav className="navbar pb-6" role="navigation" aria-label="main navigation" >
         <div className="navbar-start">
           <div className="navbar-item">
             <div className="buttons">

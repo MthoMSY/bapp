@@ -68,7 +68,11 @@ export const BudgetItems = () => {
         />
       )}
       <div className="container is-fluid">
-        <nav className="navbar" role="navigation" aria-label="main navigation">
+        <nav
+          className="navbar pb-2"
+          role="navigation"
+          aria-label="budget items navigation"
+        >
           <div className="navbar-start">
             <div className="navbar-item">
               <p className="control has-icons-left">
@@ -108,6 +112,15 @@ export const BudgetItems = () => {
                 </button>
               </div>
             </div>
+            <div className="navbar-item">
+              <div className="tags are-medium">
+                <span className="tag is-info">{budgetName || ""}</span>
+                <span className="tag is-white">Budget Status: Good</span>
+                <span className="tag is-warning is-light">
+                  Budget Limit: R50 000
+                </span>
+              </div>
+            </div>
           </div>
           <div className="navbar-end">
             <div className="navbar-item">
@@ -119,25 +132,13 @@ export const BudgetItems = () => {
                   <i className="fas fa-plus-square"></i>
                 </span>
                 <span>
-                  <strong>Create</strong>
+                  <strong>Create Item</strong>
                 </span>
               </button>
             </div>
           </div>
         </nav>
-        <nav className="level">
-          <div className="level-left">
-            <div className="level-item">
-              <div className="tags are-medium">
-                <span className="tag is-info">{budgetName || ""}</span>
-                <span className="tag is-white">Budget Status: Good</span>
-                <span className="tag is-warning is-light">
-                  Budget Limit: R50 000
-                </span>
-              </div>
-            </div>
-          </div>
-        </nav>
+
         <ItemsDisplay items={displayItems} />
       </div>
     </>
