@@ -1,4 +1,5 @@
 import React from "react";
+import { DISCLAIMER } from "../assets/common-messages";
 
 export const Footer = () => {
   return (
@@ -22,8 +23,19 @@ export const Footer = () => {
               </span>
               <span>LinkedIn</span>
             </a>
+            <a
+              href="https://github.com/MthoMSY"
+              className="button has-text-link"
+            >
+              <span className="icon is-small">
+                <i className="fab fa-github"></i>
+              </span>
+              <span>GitHub</span>
+            </a>
           </p>
-          <p></p>
+          <div className="content is-small">
+            <p className="has-text-link">{DISCLAIMER}</p>
+          </div>
         </div>
       </footer>
     </div>
