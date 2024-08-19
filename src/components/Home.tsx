@@ -1,11 +1,6 @@
-import { DISCLAIMER } from "../assets/common-messages";
-
 export const Home = () => {
   return (
     <section className="container is-fluid">
-      <div className="content is-medium">
-        <h1 className="title has-text-centered has-text-link">Easy Budget</h1>
-      </div>
       <div className="content is-medium">
         <div className="fixed-grid has-2-cols has-1-cols-mobile ">
           <div className="grid">
@@ -102,18 +97,6 @@ export const Home = () => {
                     of mind and stability. Your emergency fund is the foundation
                     to your financial freedom.
                   </p>
-                </div>
-              </article>
-            </div>
-            <div className="cell is-col-span-2">
-              <article className="message">
-                <div className="message-header">
-                  <p className="subtitle has-text-white has-text-danger">
-                    Disclaimer
-                  </p>
-                </div>
-                <div className="message-body has-text-white">
-                  <p>{DISCLAIMER}</p>
                 </div>
               </article>
             </div>
