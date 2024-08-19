@@ -44,6 +44,19 @@ export const createBudget = createAsyncThunk(
   }
 );
 
+export const deleteBudgetItem = createAsyncThunk(
+  "item/delete",
+  async (request: { payload: { itemId: string, budgetId: string }; token: string }) => {
+    const response = await api.delete(`/item/${request.payload.itemId}`, {
+      headers: {
+        Authorization: `Bearer ${request.token}`,
+      },
+    });
+
+    return response.data;
+  }
+);
+
 export const getBudgetItems = createAsyncThunk(
   "budget/items",
   async (request: { budgetId: string; token: string }) => {
@@ -116,13 +129,31 @@ const budgetSlice = createSlice({
     builder.addCase(getBudgetItems.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(signOut, (state, action) => {
-        state.budgets = []
-        state.error = ""
-        state.loading = false
-    })
+    builder.addCase(signOut, (state) => {
+      state.budgets = [];
+      state.error = "";
+      state.loading = false;
+    });
+
+    builder.addCase(deleteBudgetItem.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = "";
+
+      state.budgets
+        .find((budget) => budget.id === action.payload.budgetId)
+        ?.items.filter((item) => item.id !== action.payload.itemId);
+      // refetch items
+    });
+    builder.addCase(deleteBudgetItem.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(deleteBudgetItem.rejected, (state, action) => {
+      state.loading = false;
+      state.error =
+        action.error.message || "Error occurred when deleting budget item";
+    });
   },
 });
-
 
 export default budgetSlice.reducer;

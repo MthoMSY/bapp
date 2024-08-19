@@ -29,7 +29,7 @@ export const BudgetsDisplay = (props: Props) => {
       <table className="table is-striped is-fullwidth is narrow is-hoverable">
         <thead>
           <tr className="is-dark">
-            <th>Name</th>
+            <th>Budget</th>
             <th>Description</th>
             <th>Type</th>
             <th>Goal</th>

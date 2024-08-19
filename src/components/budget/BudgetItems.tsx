@@ -69,7 +69,7 @@ export const BudgetItems = () => {
       )}
       <div className="container is-fluid">
         <nav
-          className="navbar pb-2"
+          className="navbar pb-2 is-mobile"
           role="navigation"
           aria-label="budget items navigation"
         >
@@ -139,7 +139,11 @@ export const BudgetItems = () => {
           </div>
         </nav>
 
-        <ItemsDisplay items={displayItems} />
+        <ItemsDisplay
+          items={displayItems}
+          budgetId={id}
+          updateBudgetItems={updateItems}
+        />
       </div>
     </>
   );

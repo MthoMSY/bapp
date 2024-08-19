@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import { Item } from "../../../types/item";
 import Decimal from "decimal.js";
+import { DeleteBudgetItemConfirmationModal } from "../DeleteBudgetItemConfirmationModal";
 
 interface Props {
   items: Item[];
+  updateBudgetItems: () => void
+  budgetId: string
 }
 
 const ItemsDisplay = (props: Props) => {
-  const { items } = props;
+  const { items, updateBudgetItems, budgetId } = props;
+
+  const [selectedItem, setSelectedItem] = useState<undefined | Item>(undefined);
+
+  const [
+    showDeleteBudgetItemConfirmationModal,
+    setShowDeleteBudgetItemConfirmationModal,
+  ] = useState<boolean>(false);
+
   const getTotal = (): Decimal => {
     let sum: Decimal = new Decimal("0.00");
     items.map((item) => {
@@ -18,10 +29,19 @@ const ItemsDisplay = (props: Props) => {
   };
   return (
     <div className="table-container">
+      {showDeleteBudgetItemConfirmationModal && selectedItem && (
+        <DeleteBudgetItemConfirmationModal
+          itemId={selectedItem.id}
+          setShowModal={setShowDeleteBudgetItemConfirmationModal}
+          itemName={selectedItem.name}
+          updateBudgetItems={updateBudgetItems}
+          budgetId={budgetId}
+        />
+      )}
       <table className="table is-striped is-fullwidth is narrow is-hoverable">
         <thead>
           <tr className="is-dark">
-            <th>Name</th>
+            <th>Item</th>
             <th>Description</th>
             <th>Category</th>
             <th>Price</th>
@@ -45,24 +65,45 @@ const ItemsDisplay = (props: Props) => {
           {items.map((item) => {
             return (
               <tr key={item.id}>
-                <td onClick={() => console.log("Show item info card")}>
+                <td
+                  onClick={() => {
+                    console.log("Show item info card");
+                    setSelectedItem(item);
+                  }}
+                >
                   {item.name}
                 </td>
-                <td onClick={() => console.log("Show item info card")}>
+                <td
+                  onClick={() => {
+                    console.log("Show item info card");
+                    setSelectedItem(item);
+                  }}
+                >
                   {item.description}
                 </td>
-                <td onClick={() => console.log("Show item info card")}>
+                <td
+                  onClick={() => {
+                    console.log("Show item info card");
+                    setSelectedItem(item);
+                  }}
+                >
                   Grocery
                 </td>
-                <td onClick={() => console.log("Show item info card")}>
+                <td
+                  onClick={() => {
+                    console.log("Show item info card");
+                    setSelectedItem(item);
+                  }}
+                >
                   R{item.cost}
                 </td>
                 <td className="has-text-right">
                   <span
                     className="icon-text has-text-danger "
-                    onClick={() =>
-                      console.log("Show delete confirmation modal")
-                    }
+                    onClick={() => {
+                      setSelectedItem(item);
+                      setShowDeleteBudgetItemConfirmationModal(true)
+                    }}
                   >
                     <span className="icon is-medium">
                       <i className="fas fa-trash-alt"></i>
