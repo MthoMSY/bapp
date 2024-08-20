@@ -69,9 +69,9 @@ export const BudgetItems = () => {
       )}
       <div className="container is-fluid">
         <nav
-          className="navbar pb-2 is-mobile"
+          className="navbar pb-2"
           role="navigation"
-          aria-label="budget items navigation"
+          aria-label="Budget items navigation"
         >
           <div className="navbar-start">
             <div className="navbar-item">
@@ -110,15 +110,6 @@ export const BudgetItems = () => {
                   </span>
                   <span>Reset all filters</span>
                 </button>
-              </div>
-            </div>
-            <div className="navbar-item">
-              <div className="tags are-medium">
-                <span className="tag is-info">{budgetName || ""}</span>
-                <span className="tag is-white">Budget Status: Good</span>
-                <span className="tag is-warning is-light">
-                  Budget Limit: R50 000
-                </span>
               </div>
             </div>
           </div>

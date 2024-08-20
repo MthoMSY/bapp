@@ -46,12 +46,12 @@ export const DeleteBudgetItemConfirmationModal = (props: Props) => {
         </div>
         <section className="modal-card-body">
           <div className="content has-text-centered">
-            <h4>
-              Are you sure you want to delete{" "}
-              <a className="text-is-danger">{itemName}</a> from your budget
+            <h5>
+              Are you sure you want to delete <a>{itemName}</a> from your budget
               items?
-            </h4>
+            </h5>
           </div>
+          <hr className="modal-divider" />
           <div className="buttons is-centered">
             <button className="button" onClick={() => setShowModal(false)}>
               Cancel
