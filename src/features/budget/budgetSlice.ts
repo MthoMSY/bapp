@@ -45,9 +45,25 @@ export const createBudget = createAsyncThunk(
 );
 
 export const deleteBudgetItem = createAsyncThunk(
-  "item/delete",
-  async (request: { payload: { itemId: string, budgetId: string }; token: string }) => {
+  "budget/item/delete",
+  async (request: {
+    payload: { itemId: string; budgetId: string };
+    token: string;
+  }) => {
     const response = await api.delete(`/item/${request.payload.itemId}`, {
+      headers: {
+        Authorization: `Bearer ${request.token}`,
+      },
+    });
+
+    return response.data;
+  }
+);
+
+export const deleteBudget = createAsyncThunk(
+  "budget/delete",
+  async (request: { payload: { budgetId: string }; token: string }) => {
+    const response = await api.delete(`/budget/${request.payload.budgetId}`, {
       headers: {
         Authorization: `Bearer ${request.token}`,
       },
@@ -139,10 +155,9 @@ const budgetSlice = createSlice({
       state.loading = false;
       state.error = "";
 
-      state.budgets
-        .find((budget) => budget.id === action.payload.budgetId)
-        ?.items.filter((item) => item.id !== action.payload.itemId);
-      // refetch items
+      // state.budgets
+      //   .find((budget) => budget.id === action.meta.arg.payload.budgetId)
+      //   ?.items.filter((item) => item.id !== action.payload.id);
     });
     builder.addCase(deleteBudgetItem.pending, (state) => {
       state.loading = true;
@@ -152,6 +167,22 @@ const budgetSlice = createSlice({
       state.loading = false;
       state.error =
         action.error.message || "Error occurred when deleting budget item";
+    });
+
+    builder.addCase(deleteBudget.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = "";
+      console.log(action.payload.id);
+      // state.budgets = state.budgets.filter((budget) => budget.id !== action.payload.id);
+    });
+    builder.addCase(deleteBudget.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(deleteBudget.rejected, (state, action) => {
+      state.loading = false;
+      state.error =
+        action.error.message || "Error occurred when deleting budget";
     });
   },
 });

@@ -9,7 +9,7 @@ import { Login } from "./components/Login";
 import { PageNotFound } from "./components/PageNotFound";
 import { BudgetItems } from "./components/budget/BudgetItems";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
-import { Budgets } from "./components/budget/Budgets";
+import { BudgetsDashboard } from "./components/budget/BudgetsDashboard";
 import { Home } from "./components/Home";
 import About from "./components/About";
 import { Blogs } from "./components/Blogs";
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
         children: [
           {
             path: "/:username/budgets",
-            element: <Budgets />,
+            element: <BudgetsDashboard />,
           },
           {
             path: "/budget/:budgetName/items",
