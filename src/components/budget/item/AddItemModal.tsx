@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { toast } from "react-toastify";
 import { globalToastOptions } from "../../../notifications";
 import { createBudgetItem } from "../../../features/budget/budgetSlice";
+import { Category } from "../../../types/category.enum";
 
 interface Props {
   setShowModal: (show: boolean) => void;
@@ -14,6 +15,7 @@ type FormValues = {
   name: string;
   description: string;
   cost: number;
+  category: Category
 };
 
 const AddItemModal = (props: Props) => {
@@ -39,13 +41,13 @@ const AddItemModal = (props: Props) => {
       .finally(() => setShowModal(false));
   };
 
-  const { errors } = formState;
+  const { errors, isValid } = formState;
   return (
     <div className="modal is-active">
       <div className="modal-background"></div>
       <div className="modal-content">
         <div className="box">
-        <h2 className="subtitle has-text-centered">
+          <h2 className="subtitle has-text-centered">
             <strong>Create Item</strong>
           </h2>
           <form onSubmit={handleSubmit(onConfirm)} noValidate>
@@ -72,6 +74,27 @@ const AddItemModal = (props: Props) => {
                 />
                 <p className="help is-danger">{errors.name?.message}</p>
               </div>
+            </div>
+
+            {/*  */}
+            <div className="field">
+              <div className="control">
+                <div className="select is-fullwidth">
+                  <select {...register("category", {
+                    validate: {
+                      isCategorySelected: (value: Category) => {
+                        return Object.keys(Category).includes(value) || "Select a category"
+                      }
+                    }
+                  })}>
+                    <option value="">Select a category</option>
+                    {Object.keys(Category).map((category) => {
+                      return <option value={category}>{category}</option>;
+                    })}
+                  </select>
+                </div>
+              </div>
+              <p className="help is-danger">{errors.category?.message}</p>
             </div>
             {/*  */}
             <div className="field">
@@ -119,6 +142,7 @@ const AddItemModal = (props: Props) => {
                   type="submit"
                   className="button is-link"
                   id="createBudget"
+                  disabled={!isValid}
                 >
                   Confirm
                 </button>

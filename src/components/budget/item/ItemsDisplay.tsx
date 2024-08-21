@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Item } from "../../../types/item";
 import Decimal from "decimal.js";
 import { DeleteBudgetItemConfirmationModal } from "../DeleteBudgetItemConfirmationModal";
+import { Category } from "../../../types/category.enum";
 
 interface Props {
   items: Item[];
@@ -87,7 +88,7 @@ const ItemsDisplay = (props: Props) => {
                     setSelectedItem(item);
                   }}
                 >
-                  Grocery
+                  {item.category}
                 </td>
                 <td
                   onClick={() => {
