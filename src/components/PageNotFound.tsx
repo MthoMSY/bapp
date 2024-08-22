@@ -1,4 +1,3 @@
-import React from "react";
 import { NavLink } from "react-router-dom";
 
 export const PageNotFound = () => {
@@ -7,7 +6,7 @@ export const PageNotFound = () => {
       <div className="hero-body">
         <div className="container has-text-centered">
           <p className="title">Page not found</p>
-          <NavLink className="subtitle" to="/">
+          <NavLink className="subtitle" to="/home">
             Go to Home page
           </NavLink>
         </div>

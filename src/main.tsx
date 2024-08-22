@@ -6,17 +6,29 @@ import { store } from "./store";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { SignUp } from "./components/SignUp";
 import { Login } from "./components/Login";
-import { Budgets } from "./components/Budgets";
 import { PageNotFound } from "./components/PageNotFound";
-import { BudgetItems } from "./components/BudgetItems";
+import { BudgetItems } from "./components/budget/BudgetItems";
 import { ProtectedRoute } from "./auth/ProtectedRoute";
+import { BudgetsDashboard } from "./components/budget/BudgetsDashboard";
+import { Home } from "./components/Home";
+import About from "./components/About";
+import { Blogs } from "./components/Blogs";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <App />,
+    errorElement: <Home />,
     children: [
+      {
+        path: "/about",
+        element: <About />,
+      },
+      { path: "/blogs", element: <Blogs /> },
+      {
+        path: "/home",
+        element: <Home />,
+      },
       {
         path: "/signup",
         element: <SignUp />,
@@ -30,13 +42,12 @@ const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
-            path: "/:username/budget",
-            element: <Budgets />,
+            path: "/:username/budgets",
+            element: <BudgetsDashboard />,
           },
           {
             path: "/budget/:budgetName/items",
             element: <BudgetItems />,
-
           },
         ],
       },

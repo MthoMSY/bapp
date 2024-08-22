@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "../hooks/redux";
-import { createBudget } from "../features/user/userSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { toast } from "react-toastify";
+import { globalToastOptions } from "../../notifications";
+import { createBudget } from "../../features/budget/budgetSlice";
 
 interface Props {
   setShowModal: (show: boolean) => void;
@@ -18,8 +20,18 @@ export function BudgetModal(props: Props) {
   const form = useForm<FormValues>();
   const { register, handleSubmit, formState } = form;
   const onConfirm = (formValues: FormValues) => {
-    dispatch(createBudget({ token, payload: formValues }));
-    setShowModal(false)
+    dispatch(createBudget({ token, payload: formValues }))
+      .unwrap()
+      .then(() => {
+        toast.success(
+          `Successfully added a new budget ${formValues.name}`,
+          globalToastOptions
+        );
+      })
+      .catch(() => {
+        toast.error("Error adding budget", globalToastOptions);
+      });
+    setShowModal(false);
   };
 
   const { errors } = formState;
@@ -28,6 +40,9 @@ export function BudgetModal(props: Props) {
       <div className="modal-background"></div>
       <div className="modal-content">
         <div className="box">
+          <h2 className="subtitle has-text-centered">
+            <strong>Create Budget</strong>
+          </h2>
           <form onSubmit={handleSubmit(onConfirm)} noValidate>
             <div className="field">
               <label className="label"></label>
