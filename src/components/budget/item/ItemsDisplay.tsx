@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { Item } from "../../../types/item";
 import Decimal from "decimal.js";
 import { DeleteBudgetItemConfirmationModal } from "../DeleteBudgetItemConfirmationModal";
-import { Category } from "../../../types/category.enum";
 
 interface Props {
   items: Item[];
-  updateBudgetItems: () => void
-  budgetId: string
+  updateBudgetItems: () => void;
+  budgetId: string;
+  totalCost: Decimal;
 }
 
 const ItemsDisplay = (props: Props) => {
-  const { items, updateBudgetItems, budgetId } = props;
+  const { items, updateBudgetItems, budgetId, totalCost } = props;
 
   const [selectedItem, setSelectedItem] = useState<undefined | Item>(undefined);
 
@@ -46,22 +46,12 @@ const ItemsDisplay = (props: Props) => {
             <th>Description</th>
             <th>Category</th>
             <th>Price</th>
-            <th className="has-text-right has-text-primary">
-              Total: R{getTotal().toString()}
+            <th className="has-text-right has-text-warning">
+              Total: R{totalCost.toString()}
             </th>
           </tr>
         </thead>
-        <tfoot>
-          <tr className="is-dark">
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th className="has-text-right has-text-primary">
-              Total: R{getTotal().toString()}
-            </th>
-          </tr>
-        </tfoot>
+
         <tbody>
           {items.map((item) => {
             return (
@@ -103,7 +93,7 @@ const ItemsDisplay = (props: Props) => {
                     className="icon-text has-text-danger "
                     onClick={() => {
                       setSelectedItem(item);
-                      setShowDeleteBudgetItemConfirmationModal(true)
+                      setShowDeleteBudgetItemConfirmationModal(true);
                     }}
                   >
                     <span className="icon is-medium">
