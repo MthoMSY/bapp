@@ -3,9 +3,7 @@ import { DevTool } from "@hookform/devtools";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signUp } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
-import { globalToastOptions } from "../notifications";
+import { useAppToast } from "../hooks/useAppToast";
 
 type FormValues = {
   username: string;
@@ -15,6 +13,7 @@ type FormValues = {
 
 export function SignUp() {
   const form = useForm<FormValues>();
+  const { success, error } = useAppToast();
   const { register, control, handleSubmit, formState, getValues } = form;
   const navigate = useNavigate();
   const { loading } = useAppSelector((state) => state.user);
@@ -29,16 +28,14 @@ export function SignUp() {
     )
       .unwrap()
       .then(() => {
-        toast.success(
-          `Congratulations ${formValues.username}, you have successfully signed up!`,
-          globalToastOptions
+        success(
+          `Congratulations ${formValues.username}, you have successfully signed up!`
         );
         navigate("/login");
       })
       .catch(() =>
-        toast.error(
-          "There was error signing you up, note that username must be unique",
-          globalToastOptions
+        error(
+          "There was an error signing you up."
         )
       );
   };

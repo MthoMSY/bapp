@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Item } from "../../../types/item";
 import Decimal from "decimal.js";
 import { DeleteBudgetItemConfirmationModal } from "../DeleteBudgetItemConfirmationModal";
@@ -20,14 +20,6 @@ const ItemsDisplay = (props: Props) => {
     setShowDeleteBudgetItemConfirmationModal,
   ] = useState<boolean>(false);
 
-  const getTotal = (): Decimal => {
-    let sum: Decimal = new Decimal("0.00");
-    items.map((item) => {
-      sum = sum.add(new Decimal(item.cost.toString()));
-    });
-
-    return sum;
-  };
   return (
     <div className="table-container">
       {showDeleteBudgetItemConfirmationModal && selectedItem && (

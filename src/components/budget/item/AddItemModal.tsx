@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
-import { toast } from "react-toastify";
-import { globalToastOptions } from "../../../notifications";
 import { createBudgetItem } from "../../../features/budget/budgetSlice";
 import { Category } from "../../../types/category.enum";
+import { useAppToast } from "../../../hooks/useAppToast";
 
 interface Props {
   setShowModal: (show: boolean) => void;
@@ -15,7 +14,7 @@ type FormValues = {
   name: string;
   description: string;
   cost: number;
-  category: Category
+  category: Category;
 };
 
 const AddItemModal = (props: Props) => {
@@ -24,19 +23,17 @@ const AddItemModal = (props: Props) => {
   const dispatch = useAppDispatch();
   const form = useForm<FormValues>();
   const { register, handleSubmit, formState } = form;
+  const { success, error } = useAppToast();
 
   const onConfirm = (formValues: FormValues) => {
     dispatch(createBudgetItem({ token, payload: { ...formValues, budgetId } }))
       .unwrap()
       .then(() => {
-        toast.success(
-          `Successfully added ${formValues.name} to your budget`,
-          globalToastOptions
-        );
+        success(`Successfully added ${formValues.name} to your budget`);
         updateBudgetItems();
       })
       .catch(() => {
-        toast.error("Error adding item to your budget", globalToastOptions);
+        error("Error adding item to your budget");
       })
       .finally(() => setShowModal(false));
   };
@@ -80,13 +77,18 @@ const AddItemModal = (props: Props) => {
             <div className="field">
               <div className="control">
                 <div className="select is-fullwidth">
-                  <select {...register("category", {
-                    validate: {
-                      isCategorySelected: (value: Category) => {
-                        return Object.keys(Category).includes(value) || "Select a category"
-                      }
-                    }
-                  })}>
+                  <select
+                    {...register("category", {
+                      validate: {
+                        isCategorySelected: (value: Category) => {
+                          return (
+                            Object.keys(Category).includes(value) ||
+                            "Select a category"
+                          );
+                        },
+                      },
+                    })}
+                  >
                     <option value="">Select a category</option>
                     {Object.keys(Category).map((category) => {
                       return <option value={category}>{category}</option>;

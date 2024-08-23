@@ -1,7 +1,6 @@
-import { toast } from "react-toastify";
 import { deleteBudget } from "../../features/budget/budgetSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { globalToastOptions } from "../../notifications";
+import { useAppToast } from "../../hooks/useAppToast";
 
 interface Props {
   setShowModal: (show: boolean) => void;
@@ -12,20 +11,18 @@ interface Props {
 
 export const DeleteBudgetConfirmationModal = (props: Props) => {
   const { setShowModal, budgetId, budgetName, updateBudgets } = props;
+  const { success, error } = useAppToast();
   const { token } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
   const onConfirm = () => {
     dispatch(deleteBudget({ token, payload: { budgetId } }))
       .unwrap()
       .then(() => {
-        toast.success(
-          `Successfully removed ${budgetName} from your budget`,
-          globalToastOptions
-        );
+        success(`Successfully removed ${budgetName} from your budget`);
         updateBudgets();
       })
       .catch(() => {
-        toast.error("Error removing item from your budget", globalToastOptions);
+        error("Error removing item from your budget");
       })
       .finally(() => setShowModal(false));
   };

@@ -1,8 +1,7 @@
 import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
-import { toast } from "react-toastify";
-import { globalToastOptions } from "../../notifications";
 import { createBudget } from "../../features/budget/budgetSlice";
+import { useAppToast } from "../../hooks/useAppToast";
 
 interface Props {
   setShowModal: (show: boolean) => void;
@@ -16,6 +15,7 @@ type FormValues = {
 export function BudgetModal(props: Props) {
   const { setShowModal } = props;
   const dispatch = useAppDispatch();
+  const { success, error } = useAppToast();
   const { token } = useAppSelector((state) => state.user);
   const form = useForm<FormValues>();
   const { register, handleSubmit, formState } = form;
@@ -23,13 +23,10 @@ export function BudgetModal(props: Props) {
     dispatch(createBudget({ token, payload: formValues }))
       .unwrap()
       .then(() => {
-        toast.success(
-          `Successfully added a new budget ${formValues.name}`,
-          globalToastOptions
-        );
+        success(`Successfully added a new budget ${formValues.name}`);
       })
       .catch(() => {
-        toast.error("Error adding budget", globalToastOptions);
+        error("Error adding budget");
       });
     setShowModal(false);
   };

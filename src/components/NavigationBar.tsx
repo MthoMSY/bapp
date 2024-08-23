@@ -1,15 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signOut } from "../features/user/userSlice";
-import { toast } from "react-toastify";
+import { useAppToast } from "../hooks/useAppToast";
 
 const NavigationBar = () => {
   const { isLoggedIn, username } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const { success } = useAppToast();
   const navigate = useNavigate();
   return (
     <div className="container is-fluid">
-      <nav className="navbar pb-6" role="navigation" aria-label="main navigation" >
+      <nav
+        className="navbar pb-6"
+        role="navigation"
+        aria-label="main navigation"
+      >
         <div className="navbar-start">
           <div className="navbar-item">
             <div className="buttons">
@@ -85,7 +90,7 @@ const NavigationBar = () => {
                   className="button is-danger"
                   onClick={() => {
                     dispatch(signOut());
-                    toast.success("Cheers!");
+                    success("Cheers!");
                     navigate("/login");
                   }}
                 >
