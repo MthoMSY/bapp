@@ -38,7 +38,7 @@ export function Login() {
     if (isLoggedIn) {
       navigate(`/${username.toLocaleLowerCase()}/budgets`, { replace: true });
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate, username]);
 
   const { errors } = formState;
 

@@ -19,7 +19,6 @@ The official Redux UI binding library for React
 - Logic to update state is complicated
 - Codebase is worked on by many developers
 
-
 ## Store
 Entity which holds the global state
 
@@ -29,6 +28,18 @@ Describes what happened to the application
 ## Reducer
 Describes how the store should be updated and updates it
 
+# React hooks
+React hooks are components that let you use state and other react features without writing classes.  A more fluent way to provide a direct API to the concepts such as component lifecycle , props, state etc.
+Hooks don't work inside classes.
+
+## Rules
+- Only call hooks at the Top level
+    - Don't call hooks inside loops, conditions, or nested functions. 
+    - This ensures that hooks are called in the same order each time a component rerenders. This is what allows react to correctly preserve the state of hooks between multiple useState and useEffect calls.
+- Only call hooks from react functions
+    - Don't call hooks from regular Javascript functions
+    - Only call hooks from react tsx/jsx components or custom hooks.
+    - This ensures that all stateful logic in a component is clearly visible from its source code
 
 ```mermaid
   graph TD;

@@ -151,7 +151,7 @@ const budgetSlice = createSlice({
       state.loading = false;
     });
 
-    builder.addCase(deleteBudgetItem.fulfilled, (state, action) => {
+    builder.addCase(deleteBudgetItem.fulfilled, (state) => {
       state.loading = false;
       state.error = "";
 

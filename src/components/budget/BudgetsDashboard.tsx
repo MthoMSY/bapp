@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Budget } from "../../types/budget";
@@ -18,18 +18,18 @@ export const BudgetsDashboard = () => {
 
   const dispatch = useAppDispatch();
 
-  const refreshBudgets = (): void => {
+  const refreshBudgets = useCallback((): void => {
     if (!token) return;
     dispatch(fetchBudgets({ token }))
       .unwrap()
       .catch((error) => {
         if (error.code === 401) dispatch(signOut());
       });
-  };
+  }, [dispatch, token]);
 
   useEffect(() => {
     refreshBudgets();
-  }, [username]);
+  }, [refreshBudgets, username]);
 
   useEffect(() => {
     setDisplayBudgets(budgets);
@@ -45,7 +45,7 @@ export const BudgetsDashboard = () => {
     );
 
     setDisplayBudgets(searchResult);
-  }, [searchString]);
+  }, [budgets, searchString]);
 
   return (
     <>

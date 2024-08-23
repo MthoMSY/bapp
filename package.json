@@ -7,7 +7,8 @@
     "dev": "vite",
     "install:ci": "yarn --frozen-lockfile",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "yarn eslint ./src/**/*.ts{,x}"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.6",
@@ -22,12 +23,18 @@
     "react-toastify": "^10.0.5"
   },
   "devDependencies": {
+    "@eslint/compat": "^1.1.1",
+    "@eslint/js": "^9.9.0",
     "@hookform/devtools": "^4.3.1",
+    "@types/eslint__js": "^8.42.3",
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@types/react-redux": "^7.1.33",
     "@vitejs/plugin-react": "^3.1.0",
-    "typescript": "^4.9.3",
+    "eslint": "^9.9.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.2.0",
     "vite": "^4.1.0"
   }
 }
