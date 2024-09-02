@@ -84,12 +84,7 @@ export function SignUp() {
                   },
                   min: {
                     value: 8,
-                    message: "Password length should be more than 7 characters",
-                  },
-                  pattern: {
-                    value: /^([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+)[0-9a-zA-Z]*$/,
-                    message:
-                      "Password must contain atleast one numeric character and one uppercase letter and no special characters",
+                    message: "Password length should be at least 8 characters long",
                   },
                 })}
               />
