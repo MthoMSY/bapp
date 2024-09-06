@@ -154,10 +154,6 @@ const budgetSlice = createSlice({
     builder.addCase(deleteBudgetItem.fulfilled, (state) => {
       state.loading = false;
       state.error = "";
-
-      // state.budgets
-      //   .find((budget) => budget.id === action.meta.arg.payload.budgetId)
-      //   ?.items.filter((item) => item.id !== action.payload.id);
     });
     builder.addCase(deleteBudgetItem.pending, (state) => {
       state.loading = true;
