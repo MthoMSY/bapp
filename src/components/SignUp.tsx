@@ -3,9 +3,7 @@ import { DevTool } from "@hookform/devtools";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signUp } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import { toast } from "react-toastify";
-import { globalToastOptions } from "../notifications";
+import { useAppToast } from "../hooks/useAppToast";
 
 type FormValues = {
   username: string;
@@ -15,6 +13,7 @@ type FormValues = {
 
 export function SignUp() {
   const form = useForm<FormValues>();
+  const { success, error } = useAppToast();
   const { register, control, handleSubmit, formState, getValues } = form;
   const navigate = useNavigate();
   const { loading } = useAppSelector((state) => state.user);
@@ -29,16 +28,14 @@ export function SignUp() {
     )
       .unwrap()
       .then(() => {
-        toast.success(
-          `Congratulations ${formValues.username}, you have successfully signed up!`,
-          globalToastOptions
+        success(
+          `Congratulations ${formValues.username}, you have successfully signed up!`
         );
         navigate("/login");
       })
       .catch(() =>
-        toast.error(
-          "There was error signing you up, note that username must be unique",
-          globalToastOptions
+        error(
+          "There was an error signing you up."
         )
       );
   };
@@ -87,12 +84,7 @@ export function SignUp() {
                   },
                   min: {
                     value: 8,
-                    message: "Password length should be more than 7 characters",
-                  },
-                  pattern: {
-                    value: /^([0-9]+[a-zA-Z]+|[a-zA-Z]+[0-9]+)[0-9a-zA-Z]*$/,
-                    message:
-                      "Password must contain atleast one numeric character and one uppercase letter and no special characters",
+                    message: "Password length should be at least 8 characters long",
                   },
                 })}
               />

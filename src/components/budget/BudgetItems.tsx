@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Item } from "../../types/item";
@@ -19,7 +19,7 @@ export const BudgetItems = () => {
   const [searchString, setSearchString] = useState<string>("");
   const [showAddItemModal, setShowAddItemModal] = useState<boolean>(false);
   const [currentItemsPage, setCurrentItemsPage] = useState<number>(1);
-  const [itemsPerPage, setItemsPerPage] = useState<number>(12);
+  const [itemsPerPage, ] = useState<number>(12);
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
   const [currentItems, setCurrentItems] = useState<Item[]>([]);
 
@@ -50,7 +50,7 @@ export const BudgetItems = () => {
 
     return sum;
   };
-  const updateItems = () => {
+  const updateItems = useCallback(() => {
     if (!token) return;
     setSearchString("");
     dispatch(getBudgetItems({ budgetId: id, token }))
@@ -65,11 +65,11 @@ export const BudgetItems = () => {
         );
         console.error(`${JSON.stringify(error)}`);
       });
-  };
+  },[budgetName, dispatch, id, token]);
 
   useEffect(() => {
     updateItems();
-  }, [username]);
+  }, [updateItems, username]);
 
   useMemo(() => {
     if (searchString === "") {
@@ -84,7 +84,7 @@ export const BudgetItems = () => {
     );
 
     setDisplayItems(searchResult);
-  }, [searchString]);
+  }, [items, searchString]);
 
   return (
     <>

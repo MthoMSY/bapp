@@ -4,9 +4,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signIn } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.min.css";
-import { globalToastOptions } from "../notifications";
+import { useAppToast } from "../hooks/useAppToast";
 
 type FormValues = {
   username: string;
@@ -21,6 +19,7 @@ export function Login() {
   );
 
   const navigate = useNavigate();
+  const { success, error, warn } = useAppToast();
 
   const dispatch = useAppDispatch();
 
@@ -28,10 +27,10 @@ export function Login() {
     dispatch(signIn(formValues))
       .unwrap()
       .then(() => {
-        toast.success(`Successfully logged in!`, globalToastOptions);
+        success(`Successfully logged in!`);
       })
       .catch(() => {
-        toast.error("Invalid user credentials", globalToastOptions);
+        error("Invalid user credentials");
       });
   };
 
@@ -39,7 +38,7 @@ export function Login() {
     if (isLoggedIn) {
       navigate(`/${username.toLocaleLowerCase()}/budgets`, { replace: true });
     }
-  }, [isLoggedIn, navigate]);
+  }, [isLoggedIn, navigate, username]);
 
   const { errors } = formState;
 
@@ -123,7 +122,7 @@ export function Login() {
               <button
                 className="button is-text"
                 onClick={() => {
-                  toast.warn("We don't have this capability yet", globalToastOptions)
+                  warn("We don't have this capability yet");
                 }}
               >
                 Forgot your password?
