@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signUp } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useAppToast } from "../hooks/useAppToast";
+import { getIsLoadingClassName } from "./utils";
 
 type FormValues = {
   username: string;
@@ -27,7 +28,6 @@ export function SignUp() {
   };
 
   const onSubmit = (formValues: FormValues) => {
-    console.log(formState.isValid);
     dispatch(
       signUp({
         username: formValues.username,
@@ -152,7 +152,7 @@ export function SignUp() {
             <div className="buttons is-centered">
               <button
                 type="submit"
-                className={`button is-white ${loading ? "is-loading" : ""}`}
+                className={`button is-white ${getIsLoadingClassName(loading)}`}
                 id="login"
               >
                 SignUp

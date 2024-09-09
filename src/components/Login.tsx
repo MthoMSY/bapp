@@ -4,6 +4,7 @@ import { signIn } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppToast } from "../hooks/useAppToast";
+import { getIsLoadingClassName } from "./utils";
 
 type FormValues = {
   username: string;
@@ -106,7 +107,9 @@ export function Login() {
               <div className="buttons is-centered">
                 <button
                   type="submit"
-                  className={`button is-white ${loading ? "is-loading" : ""}`}
+                  className={`button is-white ${getIsLoadingClassName(
+                    loading
+                  )}`}
                   id="login"
                 >
                   Login

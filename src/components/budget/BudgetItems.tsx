@@ -15,11 +15,12 @@ export const BudgetItems = () => {
   const { username, token } = useAppSelector((state) => state.user);
 
   const [items, setItems] = useState<Item[]>([]);
+  const [isLoadingItems, setIsLoadingItems] = useState<boolean>(false);
   const [displayItems, setDisplayItems] = useState<Item[]>([]);
   const [searchString, setSearchString] = useState<string>("");
   const [showAddItemModal, setShowAddItemModal] = useState<boolean>(false);
   const [currentItemsPage, setCurrentItemsPage] = useState<number>(1);
-  const [itemsPerPage, ] = useState<number>(12);
+  const [itemsPerPage] = useState<number>(12);
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
   const [currentItems, setCurrentItems] = useState<Item[]>([]);
 
@@ -53,6 +54,7 @@ export const BudgetItems = () => {
   const updateItems = useCallback(() => {
     if (!token) return;
     setSearchString("");
+    setIsLoadingItems(true);
     dispatch(getBudgetItems({ budgetId: id, token }))
       .unwrap()
       .then((data: Item[]) => {
@@ -64,8 +66,9 @@ export const BudgetItems = () => {
           `Error fetching items for budget: ${budgetName} ${error.code}`
         );
         console.error(`${JSON.stringify(error)}`);
-      });
-  },[budgetName, dispatch, id, token]);
+      })
+      .finally(() => setIsLoadingItems(false));
+  }, [budgetName, dispatch, id, token]);
 
   useEffect(() => {
     updateItems();
@@ -164,6 +167,7 @@ export const BudgetItems = () => {
           budgetId={id}
           updateBudgetItems={updateItems}
           totalCost={getTotal()}
+          isLoadingItems={isLoadingItems}
         />
         <nav
           className="pagination is-rounded is-small is-centered"
@@ -194,7 +198,7 @@ export const BudgetItems = () => {
               const isCurrent: string =
                 page === currentItemsPage ? "is-current" : "";
               return (
-                <li>
+                <li key={page}>
                   <a
                     className={`pagination-link ${isCurrent}`}
                     aria-label={`Page ${page}`}

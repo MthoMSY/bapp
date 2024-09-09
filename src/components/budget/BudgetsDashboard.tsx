@@ -9,7 +9,7 @@ import { signOut } from "../../features/user/userSlice";
 
 export const BudgetsDashboard = () => {
   const { username, token } = useAppSelector((state) => state.user);
-  const { budgets } = useAppSelector((state) => state.budget);
+  const { budgets, loading } = useAppSelector((state) => state.budget);
 
   const [displayBudgets, setDisplayBudgets] = useState<Budget[]>(budgets);
   const [searchString, setSearchString] = useState<string>("");
@@ -121,6 +121,7 @@ export const BudgetsDashboard = () => {
         <BudgetsDisplay
           budgets={displayBudgets}
           updateBudgets={refreshBudgets}
+          isLoadingBudgets={loading}
         />
       </div>
     </>

@@ -88,7 +88,7 @@ export const getBudgetItems = createAsyncThunk(
   "budget/items",
   async (request: { budgetId: string; token: string }) => {
     const response = await api.get(
-      ApiVersion.V1.valueOf() + `budget/${request.budgetId}/items`,
+      ApiVersion.V1.valueOf() + `/budget/${request.budgetId}/items`,
       {
         headers: {
           Authorization: `Bearer ${request.token}`,
@@ -149,6 +149,7 @@ const budgetSlice = createSlice({
     builder.addCase(createBudget.rejected, (state, action) => {
       state.error =
         action.error.message || "Error occurred when creating budget";
+      state.loading = false;
     });
     builder.addCase(getBudgetItems.rejected, (state) => {
       state.loading = false;
@@ -183,10 +184,9 @@ const budgetSlice = createSlice({
         action.error.message || "Error occurred when deleting budget item";
     });
 
-    builder.addCase(deleteBudget.fulfilled, (state, action) => {
+    builder.addCase(deleteBudget.fulfilled, (state) => {
       state.loading = false;
       state.error = "";
-      console.log(action.payload.id);
       // state.budgets = state.budgets.filter((budget) => budget.id !== action.payload.id);
     });
     builder.addCase(deleteBudget.pending, (state) => {

@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { deleteBudget } from "../../features/budget/budgetSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { useAppToast } from "../../hooks/useAppToast";
+import { getIsLoadingClassName } from "../utils";
 
 interface Props {
   setShowModal: (show: boolean) => void;
@@ -14,7 +16,10 @@ export const DeleteBudgetConfirmationModal = (props: Props) => {
   const { success, error } = useAppToast();
   const { token } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+  const [deletePending, setDeletePending] = useState<boolean>(false);
+
   const onConfirm = () => {
+    setDeletePending(true);
     dispatch(deleteBudget({ token, payload: { budgetId } }))
       .unwrap()
       .then(() => {
@@ -24,7 +29,10 @@ export const DeleteBudgetConfirmationModal = (props: Props) => {
       .catch(() => {
         error("Error removing item from your budget");
       })
-      .finally(() => setShowModal(false));
+      .finally(() => {
+        setDeletePending(false);
+        setShowModal(false);
+      });
   };
   return (
     <div className="modal is-active">
@@ -50,7 +58,12 @@ export const DeleteBudgetConfirmationModal = (props: Props) => {
             <button className="button" onClick={() => setShowModal(false)}>
               Cancel
             </button>
-            <button className="button is-danger" onClick={onConfirm}>
+            <button
+              className={`button is-danger ${getIsLoadingClassName(
+                deletePending
+              )}`}
+              onClick={onConfirm}
+            >
               Confirm
             </button>
           </div>
