@@ -3,6 +3,8 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/redux";
 import { createBudgetItem } from "../../../features/budget/budgetSlice";
 import { Category } from "../../../types/category.enum";
 import { useAppToast } from "../../../hooks/useAppToast";
+import { useState } from "react";
+import { getIsLoadingClassName } from "../../utils";
 
 interface Props {
   setShowModal: (show: boolean) => void;
@@ -20,12 +22,14 @@ type FormValues = {
 const AddItemModal = (props: Props) => {
   const { setShowModal, budgetId, updateBudgetItems } = props;
   const { token } = useAppSelector((state) => state.user);
+  const [createItemPending, setCreateItemPending] = useState<boolean>(false);
   const dispatch = useAppDispatch();
-  const form = useForm<FormValues>();
+  const form = useForm<FormValues>({ mode: "all" });
   const { register, handleSubmit, formState } = form;
   const { success, error } = useAppToast();
 
   const onConfirm = (formValues: FormValues) => {
+    setCreateItemPending(true);
     dispatch(createBudgetItem({ token, payload: { ...formValues, budgetId } }))
       .unwrap()
       .then(() => {
@@ -35,7 +39,10 @@ const AddItemModal = (props: Props) => {
       .catch(() => {
         error("Error adding item to your budget");
       })
-      .finally(() => setShowModal(false));
+      .finally(() => {
+        setCreateItemPending(false);
+        setShowModal(false);
+      });
   };
 
   const { errors, isValid } = formState;
@@ -47,7 +54,7 @@ const AddItemModal = (props: Props) => {
           <h2 className="subtitle has-text-centered">
             <strong>Create Item</strong>
           </h2>
-          <form onSubmit={handleSubmit(onConfirm)} noValidate>
+          <form onSubmit={handleSubmit(onConfirm)}>
             {/*  */}
             <div className="field">
               <label className="label"></label>
@@ -62,10 +69,13 @@ const AddItemModal = (props: Props) => {
                       message: "Name for your item is required",
                       value: true,
                     },
-                    min: {
-                      value: 3,
-                      message:
-                        "Name of your budget must be at least 3 characters",
+                    validate: {
+                      minLength: (fieldValue: string) => {
+                        return (
+                          fieldValue.length > 2 ||
+                          "Name of your item must be at least 3 characters"
+                        );
+                      },
                     },
                   })}
                 />
@@ -91,7 +101,11 @@ const AddItemModal = (props: Props) => {
                   >
                     <option value="">Select a category</option>
                     {Object.keys(Category).map((category) => {
-                      return <option value={category}>{category}</option>;
+                      return (
+                        <option value={category} key={category}>
+                          {category}
+                        </option>
+                      );
                     })}
                   </select>
                 </div>
@@ -142,7 +156,9 @@ const AddItemModal = (props: Props) => {
               <div className="control">
                 <button
                   type="submit"
-                  className="button is-link"
+                  className={`button is-link ${getIsLoadingClassName(
+                    createItemPending
+                  )}`}
                   id="createBudget"
                   disabled={!isValid}
                 >

@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { createBudget } from "../../features/budget/budgetSlice";
 import { useAppToast } from "../../hooks/useAppToast";
+import { useState } from "react";
+import { getIsLoadingClassName } from "../utils";
 
 interface Props {
   setShowModal: (show: boolean) => void;
@@ -17,9 +19,13 @@ export function BudgetModal(props: Props) {
   const dispatch = useAppDispatch();
   const { success, error } = useAppToast();
   const { token } = useAppSelector((state) => state.user);
-  const form = useForm<FormValues>();
+
+  const [createBudgetPending, setCreateBudgetPending] =
+    useState<boolean>(false);
+  const form = useForm<FormValues>({ mode: "all" });
   const { register, handleSubmit, formState } = form;
   const onConfirm = (formValues: FormValues) => {
+    setCreateBudgetPending(true);
     dispatch(createBudget({ token, payload: formValues }))
       .unwrap()
       .then(() => {
@@ -27,8 +33,11 @@ export function BudgetModal(props: Props) {
       })
       .catch(() => {
         error("Error adding budget");
+      })
+      .finally(() => {
+        setShowModal(false);
+        setCreateBudgetPending(false);
       });
-    setShowModal(false);
   };
 
   const { errors } = formState;
@@ -40,7 +49,7 @@ export function BudgetModal(props: Props) {
           <h2 className="subtitle has-text-centered">
             <strong>Create Budget</strong>
           </h2>
-          <form onSubmit={handleSubmit(onConfirm)} noValidate>
+          <form onSubmit={handleSubmit(onConfirm)}>
             <div className="field">
               <label className="label"></label>
               <div className="control">
@@ -54,10 +63,13 @@ export function BudgetModal(props: Props) {
                       message: "Name for your budget is required",
                       value: true,
                     },
-                    min: {
-                      value: 3,
-                      message:
-                        "Name of your budget must be at least 3 characters",
+                    validate: {
+                      minLength: (fieldValue: string) => {
+                        return (
+                          fieldValue.length > 3 ||
+                          "Name of your budget must be at least 3 characters"
+                        );
+                      },
                     },
                   })}
                 />
@@ -73,13 +85,16 @@ export function BudgetModal(props: Props) {
                   id="budgetDescription"
                   {...register("description", {
                     required: {
-                      message: "Description for your budget is required",
                       value: true,
+                      message: "Description for your budget is required",
                     },
-                    min: {
-                      value: 3,
-                      message:
-                        "Description of your budget must be at least 3 characters",
+                    validate: {
+                      minLength: (fieldValue: string) => {
+                        return (
+                          fieldValue.length > 2 ||
+                          "Description of your budget must be at least 3 characters"
+                        );
+                      },
                     },
                   })}
                 ></textarea>
@@ -88,15 +103,15 @@ export function BudgetModal(props: Props) {
             </div>
 
             <div className="field is-grouped is-grouped-centered">
-              <div className="control">
-                <button
-                  type="submit"
-                  className="button is-link"
-                  id="createBudget"
-                >
-                  Confirm
-                </button>
-              </div>
+              <button
+                type="submit"
+                className={`button is-link ${getIsLoadingClassName(
+                  createBudgetPending
+                )}`}
+                id="createBudget"
+              >
+                Confirm
+              </button>
             </div>
           </form>
         </div>

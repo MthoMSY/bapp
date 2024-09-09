@@ -6,9 +6,10 @@ import { DeleteBudgetConfirmationModal } from "../DeleteBudgetConfirmationModal"
 interface Props {
   budgets: Budget[];
   updateBudgets: () => void
+  isLoadingBudgets: boolean
 }
 export const BudgetsDisplay = (props: Props) => {
-  const { budgets, updateBudgets } = props;
+  const { budgets, updateBudgets, isLoadingBudgets } = props;
   const [
     showDeleteBudgetConfirmationModal,
     setShowDeleteBudgetConfirmationModal,
@@ -42,7 +43,7 @@ export const BudgetsDisplay = (props: Props) => {
           updateBudgets={updateBudgets}
         />
       )}
-      <table className="table is-striped is-fullwidth is narrow is-hoverable">
+      { !isLoadingBudgets && (<table className="table is-striped is-fullwidth is narrow is-hoverable">
         <thead>
           <tr className="is-dark">
             <th>Budget</th>
@@ -120,6 +121,12 @@ export const BudgetsDisplay = (props: Props) => {
           })}
         </tbody>
       </table>
+)}
+      {isLoadingBudgets && (
+        <progress className=" progress is-large is-white" max="100">
+          loading items...
+        </progress>
+      )}
     </div>
   );
 };

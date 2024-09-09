@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signUp } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useAppToast } from "../hooks/useAppToast";
+import { getIsLoadingClassName } from "./utils";
 
 type FormValues = {
   username: string;
@@ -12,12 +12,20 @@ type FormValues = {
 };
 
 export function SignUp() {
-  const form = useForm<FormValues>();
+  const form = useForm<FormValues>({ mode: "all" });
   const { success, error } = useAppToast();
-  const { register, control, handleSubmit, formState, getValues } = form;
+  const { register, handleSubmit, formState, getValues } = form;
   const navigate = useNavigate();
   const { loading } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
+
+  const minLengthValidation = (fieldValue: string, min: number): boolean => {
+    return fieldValue.length > min;
+  };
+
+  const maxLengthValidation = (fieldValue: string): boolean => {
+    return fieldValue.length < 21;
+  };
 
   const onSubmit = (formValues: FormValues) => {
     dispatch(
@@ -33,11 +41,7 @@ export function SignUp() {
         );
         navigate("/login");
       })
-      .catch(() =>
-        error(
-          "There was an error signing you up."
-        )
-      );
+      .catch(() => error("There was an error signing you up."));
   };
 
   const { errors } = formState;
@@ -58,9 +62,19 @@ export function SignUp() {
                     message: "Username is required",
                     value: true,
                   },
-                  min: {
-                    value: 3,
-                    message: "Username length must be 3 characters or more",
+                  validate: {
+                    minLength: (fieldValue: string) => {
+                      return (
+                        minLengthValidation(fieldValue, 3) ||
+                        "Username length should be at least 3 characters long"
+                      );
+                    },
+                    maxLength: (fieldValue: string) => {
+                      return (
+                        maxLengthValidation(fieldValue) ||
+                        "Password length must be less than 21 characters"
+                      );
+                    },
                   },
                 })}
               />
@@ -82,9 +96,19 @@ export function SignUp() {
                     message: "Password is required",
                     value: true,
                   },
-                  min: {
-                    value: 8,
-                    message: "Password length should be at least 8 characters long",
+                  validate: {
+                    minLength: (fieldValue: string) => {
+                      return (
+                        minLengthValidation(fieldValue, 8) ||
+                        "Password length should be at least 8 characters long"
+                      );
+                    },
+                    maxLength: (fieldValue: string) => {
+                      return (
+                        maxLengthValidation(fieldValue) ||
+                        "Password length must be less than 21 characters"
+                      );
+                    },
                   },
                 })}
               />
@@ -128,7 +152,7 @@ export function SignUp() {
             <div className="buttons is-centered">
               <button
                 type="submit"
-                className={`button is-white ${loading ? "is-loading" : ""}`}
+                className={`button is-white ${getIsLoadingClassName(loading)}`}
                 id="login"
               >
                 SignUp
@@ -136,7 +160,6 @@ export function SignUp() {
             </div>
           </div>
         </form>
-        <DevTool control={control} />
         <div className="field">
           <div className="buttons is-right">
             <button
