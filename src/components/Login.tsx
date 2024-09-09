@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { DevTool } from "@hookform/devtools";
 import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signIn } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
@@ -12,8 +11,8 @@ type FormValues = {
 };
 
 export function Login() {
-  const form = useForm<FormValues>();
-  const { register, control, handleSubmit, formState } = form;
+  const form = useForm<FormValues>({ mode: "all" });
+  const { register, handleSubmit, formState } = form;
   const { isLoggedIn, username, loading } = useAppSelector(
     (state) => state.user
   );
@@ -46,7 +45,7 @@ export function Login() {
     <div className="section">
       <div className="box ">
         <div className="block">
-          <form onSubmit={handleSubmit(onSubmit)} noValidate>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="field">
               <div className="control has-icons-left">
                 <input
@@ -59,9 +58,13 @@ export function Login() {
                       message: "Username is required",
                       value: true,
                     },
-                    min: {
-                      value: 3,
-                      message: "Username length must be 3 characters or more",
+                    validate: {
+                      minLength: (fieldValue: string) => {
+                        return (
+                          fieldValue.length > 3 ||
+                          "Username length must be 3 characters or more"
+                        );
+                      },
                     },
                   })}
                 />
@@ -83,10 +86,13 @@ export function Login() {
                       message: "Password is required",
                       value: true,
                     },
-                    min: {
-                      value: 8,
-                      message:
-                        "Password length should be more than 7 characters",
+                    validate: {
+                      minLength: (fieldValue: string) => {
+                        return (
+                          fieldValue.length > 7 ||
+                          "Password length should be more than 7 characters"
+                        );
+                      },
                     },
                   })}
                 />
@@ -108,7 +114,6 @@ export function Login() {
               </div>
             </div>
           </form>
-          <DevTool control={control} />
           <div className="field">
             <div className="buttons is-right">
               <button
