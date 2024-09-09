@@ -36,7 +36,7 @@ export const createBudget = createAsyncThunk(
     token: string;
   }) => {
     const response = await api.post(
-      ApiVersion.V1.valueOf() + "/budget",
+     "/budget",
       request.payload,
       {
         headers: {
@@ -56,7 +56,7 @@ export const deleteBudgetItem = createAsyncThunk(
     token: string;
   }) => {
     const response = await api.delete(
-      ApiVersion.V1.valueOf() + `/item/${request.payload.itemId}`,
+     `/item/${request.payload.itemId}`,
       {
         headers: {
           Authorization: `Bearer ${request.token}`,
@@ -72,7 +72,7 @@ export const deleteBudget = createAsyncThunk(
   "budget/delete",
   async (request: { payload: { budgetId: string }; token: string }) => {
     const response = await api.delete(
-      ApiVersion.V1.valueOf() + `/budget/${request.payload.budgetId}`,
+     `/budget/${request.payload.budgetId}`,
       {
         headers: {
           Authorization: `Bearer ${request.token}`,
@@ -88,7 +88,7 @@ export const getBudgetItems = createAsyncThunk(
   "budget/items",
   async (request: { budgetId: string; token: string }) => {
     const response = await api.get(
-      ApiVersion.V1.valueOf() + `/budget/${request.budgetId}/items`,
+     `/budget/${request.budgetId}/items`,
       {
         headers: {
           Authorization: `Bearer ${request.token}`,
@@ -111,7 +111,7 @@ export const createBudgetItem = createAsyncThunk(
     token: string;
   }) => {
     const response = await api.post(
-      ApiVersion.V1.valueOf() + "/item/budget",
+     "/item/budget",
       request.payload,
       {
         headers: {
@@ -184,7 +184,7 @@ const budgetSlice = createSlice({
         action.error.message || "Error occurred when deleting budget item";
     });
 
-    builder.addCase(deleteBudget.fulfilled, (state) => {
+    builder.addCase(deleteBudget.fulfilled, (state, ) => {
       state.loading = false;
       state.error = "";
       // state.budgets = state.budgets.filter((budget) => budget.id !== action.payload.id);
