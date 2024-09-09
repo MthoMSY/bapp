@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { RootState } from "../../store";
 import { api } from "../../api";
-import { ApiVersion } from "../../api/api-versions.enum";
 
 interface UserState {
   isLoggedIn: boolean;
@@ -25,7 +24,7 @@ export const signIn = createAsyncThunk(
   "user/signin",
   async (request: { username: string; password: string }) => {
     const response = await api.post(
-      ApiVersion.V1.valueOf() + "/auth/signin",
+     "/auth/signin",
       request
     );
 
@@ -37,7 +36,7 @@ export const signUp = createAsyncThunk(
   "user/signup",
   async (request: { username: string; password: string }) => {
     const response = await api.post(
-      ApiVersion.V1.valueOf() + "/auth/signup",
+     "/auth/signup",
       request
     );
 
