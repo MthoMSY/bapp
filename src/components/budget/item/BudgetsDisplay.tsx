@@ -26,11 +26,11 @@ export const BudgetsDisplay = (props: Props) => {
       state: { id: budgetId },
     });
   };
-  const getType = (): string => {
-    const num = Math.floor(Math.random() * 2);
-    if (num == 0) return "Strict";
-    return "Flexible";
-  };
+  // const getType = (): string => {
+  //   const num = Math.floor(Math.random() * 2);
+  //   if (num == 0) return "Strict";
+  //   return "Flexible";
+  // };
 
   return (
     <div className="table-container">
@@ -47,8 +47,8 @@ export const BudgetsDisplay = (props: Props) => {
           <tr className="is-dark">
             <th>Budget</th>
             <th>Description</th>
-            <th>Type</th>
-            <th>Goal</th>
+            {/* <th>Type</th> */}
+            {/* <th>Goal</th> */}
             <th></th>
             <th></th>
           </tr>
@@ -73,7 +73,7 @@ export const BudgetsDisplay = (props: Props) => {
                 >
                   {budget.description}
                 </td>
-                <td
+                {/* <td
                   onClick={() => {
                     setSelectedBudget(budget);
                     navigateToBudget(budget.id, budget.name);
@@ -88,7 +88,7 @@ export const BudgetsDisplay = (props: Props) => {
                   }}
                 >
                   R50
-                </td>
+                </td> */}
                 <td className="has-text-right">
                   <span
                     className="icon-text has-text-link "
