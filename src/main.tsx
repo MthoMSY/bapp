@@ -18,42 +18,40 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <Home />,
+    errorElement: <PageNotFound />,
     children: [
       {
-        path: "/about",
-        element: <About />,
-      },
-      { path: "/blogs", element: <Blogs /> },
-      {
-        path: "/home",
+        index: true,
         element: <Home />,
       },
       {
-        path: "/signup",
+        path: "about",
+        element: <About />,
+      },
+      {
+        path: "blogs",
+        element: <Blogs />,
+      },
+      {
+        path: "signup",
         element: <SignUp />,
       },
-
       {
-        path: "/login",
+        path: "login",
         element: <Login />,
       },
       {
         element: <ProtectedRoute />,
         children: [
           {
-            path: "/:username/budgets",
+            path: ":username/budgets",
             element: <BudgetsDashboard />,
           },
           {
-            path: "/budget/:budgetName/items",
+            path: "budget/:budgetName/items",
             element: <BudgetItems />,
           },
         ],
-      },
-      {
-        path: "*",
-        element: <PageNotFound />,
       },
     ],
   },

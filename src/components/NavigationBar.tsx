@@ -33,7 +33,7 @@ const NavigationBar = () => {
 
       <div className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
         <div className="navbar-start">
-          <a className="navbar-item" onClick={() => navigate("/home")}>
+          <a className="navbar-item" onClick={() => navigate("/")}>
             <span className="icon">
               <i className="fas fa-home"></i>
             </span>
