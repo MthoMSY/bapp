@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Item } from "../../../types/item";
 import Decimal from "decimal.js";
 import { DeleteBudgetItemConfirmationModal } from "../DeleteBudgetItemConfirmationModal";
+import "./ItemsDisplay.css";
 
 interface Props {
   items: Item[];
@@ -12,15 +13,20 @@ interface Props {
 }
 
 const ItemsDisplay = (props: Props) => {
-  const { items, updateBudgetItems, budgetId, totalCost, isLoadingItems } =
-    props;
-
+  const { items, updateBudgetItems, budgetId, totalCost, isLoadingItems } = props;
   const [selectedItem, setSelectedItem] = useState<undefined | Item>(undefined);
+  const [showDeleteBudgetItemConfirmationModal, setShowDeleteBudgetItemConfirmationModal] = useState<boolean>(false);
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
 
-  const [
-    showDeleteBudgetItemConfirmationModal,
-    setShowDeleteBudgetItemConfirmationModal,
-  ] = useState<boolean>(false);
+  const toggleItemExpansion = (itemId: string) => {
+    const newExpandedItems = new Set(expandedItems);
+    if (newExpandedItems.has(itemId)) {
+      newExpandedItems.delete(itemId);
+    } else {
+      newExpandedItems.add(itemId);
+    }
+    setExpandedItems(newExpandedItems);
+  };
 
   return (
     <div className="table-container">
@@ -33,78 +39,57 @@ const ItemsDisplay = (props: Props) => {
           budgetId={budgetId}
         />
       )}
+      <div className="is-flex is-justify-content-space-between is-align-items-center mb-3">
+        <h2 className="title is-4">Budget Items</h2>
+        <p className="has-text-weight-bold has-text-warning">
+          Total: R{totalCost.toString()}
+        </p>
+      </div>
       {!isLoadingItems && (
-        <table className="table is-striped is-fullwidth is narrow is-hoverable">
-          <thead>
-            <tr className="is-dark">
-              <th>Item</th>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Price</th>
-              <th className="has-text-right has-text-warning">
-                Total: R{totalCost.toString()}
-              </th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {items.map((item) => {
-              return (
-                <tr key={item.id}>
-                  <td
-                    onClick={() => {
-                      console.log("Show item info card");
-                      setSelectedItem(item);
-                    }}
-                  >
+        <div className="table-wrapper">
+          <table className="table is-fullwidth is-striped is-narrow is-hoverable">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th className="is-hidden-mobile">Description</th>
+                <th className="is-hidden-mobile">Category</th>
+                <th>Price</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr key={item.id} className={expandedItems.has(item.id) ? "is-expanded" : ""}>
+                  <td onClick={() => toggleItemExpansion(item.id)}>
                     {item.name}
+                    <span className="icon is-small ml-2">
+                      <i className={`fas fa-chevron-${expandedItems.has(item.id) ? 'up' : 'down'}`}></i>
+                    </span>
                   </td>
-                  <td
-                    onClick={() => {
-                      console.log("Show item info card");
-                      setSelectedItem(item);
-                    }}
-                  >
-                    {item.description}
-                  </td>
-                  <td
-                    onClick={() => {
-                      console.log("Show item info card");
-                      setSelectedItem(item);
-                    }}
-                  >
-                    {item.category}
-                  </td>
-                  <td
-                    onClick={() => {
-                      console.log("Show item info card");
-                      setSelectedItem(item);
-                    }}
-                  >
-                    R{item.cost}
-                  </td>
-                  <td className="has-text-right">
-                    <span
-                      className="icon-text has-text-danger "
+                  <td className="is-hidden-mobile">{item.description}</td>
+                  <td className="is-hidden-mobile">{item.category}</td>
+                  <td>R{item.cost}</td>
+                  <td>
+                    <button
+                      className="button is-small is-danger is-light"
                       onClick={() => {
                         setSelectedItem(item);
                         setShowDeleteBudgetItemConfirmationModal(true);
                       }}
                     >
-                      <span className="icon is-medium">
+                      <span className="icon is-small">
                         <i className="fas fa-trash-alt"></i>
                       </span>
-                    </span>
+                    </button>
                   </td>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
-
       {isLoadingItems && (
-        <progress className=" progress is-large is-white" max="100">
+        <progress className="progress is-large is-white" max="100">
           loading items...
         </progress>
       )}

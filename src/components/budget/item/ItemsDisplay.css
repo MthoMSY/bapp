@@ -1,0 +1,43 @@
+.table-wrapper {
+  overflow-x: auto;
+}
+
+@media screen and (max-width: 768px) {
+  .table td {
+    vertical-align: middle;
+  }
+
+  .table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #dbdbdb;
+  }
+
+  .table td:before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .table td:last-child {
+    border-bottom: 0;
+  }
+
+  .is-expanded td {
+    display: block;
+    text-align: right;
+    border-bottom: 1px solid #dbdbdb;
+  }
+
+  .is-expanded td:before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+
+  .is-expanded td:last-child {
+    border-bottom: 0;
+  }
+}

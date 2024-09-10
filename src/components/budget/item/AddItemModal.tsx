@@ -153,6 +153,12 @@ const AddItemModal = (props: Props) => {
             </div>
             {/*  */}
             <div className="field is-grouped is-grouped-centered">
+            <button 
+              className="button" 
+              onClick={() => setShowModal(false)}
+            >
+              Cancel
+            </button>
               <div className="control">
                 <button
                   type="submit"

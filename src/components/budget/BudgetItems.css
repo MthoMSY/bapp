@@ -1,0 +1,29 @@
+@media screen and (max-width: 768px) {
+  .buttons {
+    justify-content: flex-start;
+  }
+  
+  .buttons .button {
+    margin-bottom: 0.5rem;
+  }
+
+  .pagination-previous,
+  .pagination-next {
+    float: none;
+    width: 50%;
+  }
+
+  .pagination-list {
+    display: none;
+  }
+}
+
+.budget-items-container {
+  padding-bottom: 3rem; /* Adds padding at the bottom of the container */
+}
+
+@media screen and (max-width: 768px) {
+  .budget-items-container {
+    padding-bottom: 2rem; /* Slightly less padding on mobile */
+  }
+}
