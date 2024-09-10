@@ -7,6 +7,7 @@ import ItemsDisplay from "./item/ItemsDisplay";
 import AddItemModal from "./item/AddItemModal";
 import { getBudgetItems } from "../../features/budget/budgetSlice";
 import Decimal from "decimal.js";
+import "./BudgetItems.css"; // Make sure to create this CSS file
 
 export const BudgetItems = () => {
   const location = useLocation();
@@ -95,73 +96,61 @@ export const BudgetItems = () => {
         <AddItemModal
           budgetId={id}
           setShowModal={setShowAddItemModal}
-          updateBudgetItems={async () => {
-            updateItems();
-          }}
+          updateBudgetItems={updateItems}
         />
       )}
-      <div className="container is-fluid">
-        <nav
-          className="navbar pb-2"
-          role="navigation"
-          aria-label="Budget items navigation"
-        >
-          <div className="navbar-start">
-            <div className="navbar-item">
+      <div className="container is-fluid budget-items-container">
+        <div className="columns is-multiline">
+          <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
+            <div className="field">
               <p className="control has-icons-left">
                 <input
                   value={searchString}
                   className="input"
-                  onChange={(e) => {
-                    setSearchString(e.target.value);
-                  }}
+                  onChange={(e) => setSearchString(e.target.value)}
                   type="text"
-                  placeholder="Search"
+                  placeholder="Search items"
                 />
-                <span className="icon is-left">
+                <span className="icon is-small is-left">
                   <i className="fas fa-search" aria-hidden="true"></i>
                 </span>
               </p>
             </div>
-            <div className="navbar-item">
-              <div className="buttons">
-                <button className="button is-link is-outlined is-small">
-                  <span className="icon is-left">
-                    <i className="fas fa-filter"></i>
-                  </span>
-                  <span>Add filters</span>
-                </button>
-                <button
-                  onClick={() => {
-                    // todo: clear all filters
-                    setSearchString("");
-                  }}
-                  className="button is-warning is-outlined is-small"
-                >
-                  <span className="icon is-left">
-                    <i className="fas fa-power-off"></i>
-                  </span>
-                  <span>Reset all filters</span>
-                </button>
-              </div>
-            </div>
           </div>
-          <div className="navbar-end">
-            <div className="navbar-item">
+          <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
+            <div className="buttons are-small">
+              <button className="button is-link is-outlined">
+                <span className="icon is-small">
+                  <i className="fas fa-filter"></i>
+                </span>
+                <span>Add filters</span>
+              </button>
               <button
-                className="button is-link is-outlined is-fullwidth"
-                onClick={() => setShowAddItemModal(true)}
+                onClick={() => setSearchString("")}
+                className="button is-warning is-outlined"
               >
-                <span className="icon">
-                  <i className="fas fa-plus-square"></i>
+                <span className="icon is-small">
+                  <i className="fas fa-power-off"></i>
                 </span>
-                <span>
-                  <strong>Create Item</strong>
-                </span>
+                <span>Reset filters</span>
               </button>
             </div>
           </div>
-        </nav>
+          <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
+            <button
+              className="button is-link is-outlined is-fullwidth"
+              onClick={() => setShowAddItemModal(true)}
+            >
+              <span className="icon">
+                <i className="fas fa-plus-square"></i>
+              </span>
+              <span>
+                <strong>Create Item</strong>
+              </span>
+            </button>
+          </div>
+        </div>
+
         <ItemsDisplay
           items={currentItems}
           budgetId={id}
@@ -169,8 +158,9 @@ export const BudgetItems = () => {
           totalCost={getTotal()}
           isLoadingItems={isLoadingItems}
         />
+
         <nav
-          className="pagination is-rounded is-small is-centered"
+          className="pagination is-rounded is-small is-centered mb-5"
           role="navigation"
           aria-label="pagination"
         >
@@ -193,7 +183,7 @@ export const BudgetItems = () => {
           >
             Next page
           </a>
-          <ul className="pagination-list">
+          <ul className="pagination-list is-hidden-mobile">
             {pageNumbers.map((page) => {
               const isCurrent: string =
                 page === currentItemsPage ? "is-current" : "";

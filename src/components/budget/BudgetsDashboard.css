@@ -1,0 +1,9 @@
+@media screen and (max-width: 768px) {
+  .buttons {
+    justify-content: flex-start;
+  }
+  
+  .buttons .button {
+    margin-bottom: 0.5rem;
+  }
+}

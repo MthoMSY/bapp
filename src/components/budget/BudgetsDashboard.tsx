@@ -65,7 +65,7 @@ export const BudgetsDashboard = () => {
                   className="input"
                   onChange={(e) => setSearchString(e.target.value)}
                   type="text"
-                  placeholder="Search budgets"
+                  placeholder="Search"
                 />
                 <span className="icon is-small is-left">
                   <i className="fas fa-search" aria-hidden="true"></i>
@@ -74,8 +74,8 @@ export const BudgetsDashboard = () => {
             </div>
           </div>
           <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
-            <div className="buttons">
-              <button className="button is-link is-outlined is-small">
+            <div className="buttons are-small">
+              <button className="button is-link is-outlined">
                 <span className="icon is-small">
                   <i className="fas fa-filter"></i>
                 </span>
@@ -83,7 +83,7 @@ export const BudgetsDashboard = () => {
               </button>
               <button
                 onClick={() => setSearchString("")}
-                className="button is-warning is-outlined is-small"
+                className="button is-warning is-outlined"
               >
                 <span className="icon is-small">
                   <i className="fas fa-power-off"></i>
