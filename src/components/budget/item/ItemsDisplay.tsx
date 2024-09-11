@@ -28,9 +28,8 @@ const ItemsDisplay = (props: Props) => {
           budgetId={budgetId}
         />
       )}
-      <div className="is-flex is-justify-content-space-between is-align-items-center mb-3">
-        <h2 className="title is-4">Budget Items</h2>
-        <p className="has-text-weight-bold has-text-warning">
+      <div className="has-text-centered mb-4">
+        <p className="has-text-weight-bold is-size-4 has-text-success-light">
           Total: R{totalCost.toString()}
         </p>
       </div>
