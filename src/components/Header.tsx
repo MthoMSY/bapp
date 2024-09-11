@@ -2,8 +2,14 @@ import React from "react";
 
 export const Header = () => {
   return (
-    <div className="content is-medium pt-3">
-      <h1 className="title has-text-centered ">Easy Budget</h1>
-    </div>
+    <section className="hero is-small">
+      <div className="hero-body">
+        <div className="container">
+          <h1 className="title is-size-2-desktop is-size-3-tablet is-size-4-mobile has-text-centered">
+            Personal Finance Management
+          </h1>
+        </div>
+      </div>
+    </section>
   );
 };

@@ -14,7 +14,7 @@ type FormValues = {
   description: string;
 };
 
-export function BudgetModal(props: Props) {
+export function CreateBudgetModal(props: Props) {
   const { setShowModal } = props;
   const dispatch = useAppDispatch();
   const { success, error } = useAppToast();
@@ -103,12 +103,9 @@ export function BudgetModal(props: Props) {
             </div>
 
             <div className="field is-grouped is-grouped-centered">
-            <button 
-              className="button" 
-              onClick={() => setShowModal(false)}
-            >
-              Cancel
-            </button>
+              <button className="button" onClick={() => setShowModal(false)}>
+                Cancel
+              </button>
               <button
                 type="submit"
                 className={`button is-link ${getIsLoadingClassName(
