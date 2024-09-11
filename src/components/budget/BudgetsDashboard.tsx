@@ -54,8 +54,11 @@ export const BudgetsDashboard = () => {
       <div className="container is-fluid">
         <div className="content is-medium is-mobile-hidden">
           <p className="has-text-centered">
-            <span className="has-text-weight-bold">Hey {username.length > 10 ? username.slice(0, 10) + "..." : username} ! <br />
-            Welcome to easy budgets
+            <span className="has-text-weight-bold">
+              Hey{" "}
+              {username.length > 10 ? username.slice(0, 10) + "..." : username}{" "}
+              ! <br />
+              Welcome to easy budgets
             </span>
           </p>
         </div>

@@ -154,7 +154,9 @@ export function SignUp() {
               <div className="buttons is-centered">
                 <button
                   type="submit"
-                  className={`button is-white ${getIsLoadingClassName(loading)}`}
+                  className={`button is-white ${getIsLoadingClassName(
+                    loading
+                  )}`}
                   id="login"
                 >
                   SignUp

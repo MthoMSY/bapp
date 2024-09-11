@@ -164,7 +164,8 @@ export const BudgetItems = () => {
           <a
             className="pagination-previous"
             onClick={() => {
-              if (currentItemsPage > 1) setCurrentItemsPage(currentItemsPage - 1);
+              if (currentItemsPage > 1)
+                setCurrentItemsPage(currentItemsPage - 1);
             }}
           >
             Previous
@@ -172,7 +173,8 @@ export const BudgetItems = () => {
           <a
             className="pagination-next"
             onClick={() => {
-              if (currentItemsPage < pageNumbers.length) setCurrentItemsPage(currentItemsPage + 1);
+              if (currentItemsPage < pageNumbers.length)
+                setCurrentItemsPage(currentItemsPage + 1);
             }}
           >
             Next page
@@ -181,7 +183,9 @@ export const BudgetItems = () => {
             {pageNumbers.map((page) => (
               <li key={page}>
                 <a
-                  className={`pagination-link ${page === currentItemsPage ? 'is-current' : ''}`}
+                  className={`pagination-link ${
+                    page === currentItemsPage ? "is-current" : ""
+                  }`}
                   aria-label={`Page ${page}`}
                   aria-current={page === currentItemsPage ? "page" : undefined}
                   onClick={() => setCurrentItemsPage(page)}

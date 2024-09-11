@@ -56,10 +56,7 @@ export const DeleteBudgetConfirmationModal = (props: Props) => {
           </div>
           <hr className="modal-divider" />
           <div className="buttons is-centered">
-            <button 
-              className="button" 
-              onClick={() => setShowModal(false)}
-            >
+            <button className="button" onClick={() => setShowModal(false)}>
               Cancel
             </button>
             <button

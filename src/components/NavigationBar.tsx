@@ -14,13 +14,15 @@ const NavigationBar = () => {
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
-        <a className="navbar-item" href="/">
+        <a className="navbar-item" onClick={() => {
+              navigate("/");
+            }}>
           <strong>Easy Budget</strong>
         </a>
 
         <a
           role="button"
-          className={`navbar-burger burger ${isActive ? 'is-active' : ''}`}
+          className={`navbar-burger burger ${isActive ? "is-active" : ""}`}
           aria-label="menu"
           aria-expanded="false"
           onClick={() => setIsActive(!isActive)}
@@ -31,30 +33,39 @@ const NavigationBar = () => {
         </a>
       </div>
 
-      <div className={`navbar-menu ${isActive ? 'is-active' : ''}`}>
+      <div className={`navbar-menu ${isActive ? "is-active" : ""}`}>
         <div className="navbar-start">
-          <a className="navbar-item" onClick={() => {
-            navigate("/")
-            setIsActive(!isActive)
-          }}>
+          <a
+            className="navbar-item"
+            onClick={() => {
+              navigate("/");
+              setIsActive(!isActive);
+            }}
+          >
             <span className="icon">
               <i className="fas fa-home"></i>
             </span>
             <span>Home</span>
           </a>
-          <a className="navbar-item" onClick={() => {
-            navigate("/about")
-            setIsActive(false)
-          }}>
+          <a
+            className="navbar-item"
+            onClick={() => {
+              navigate("/about");
+              setIsActive(false);
+            }}
+          >
             <span className="icon">
               <i className="fas fa-info"></i>
             </span>
             <span>About</span>
           </a>
-          <a className="navbar-item" onClick={() => {
-            navigate("/blogs")
-            setIsActive(false)
-            }}>
+          <a
+            className="navbar-item"
+            onClick={() => {
+              navigate("/blogs");
+              setIsActive(false);
+            }}
+          >
             <span className="icon">
               <i className="fab fa-blogger"></i>
             </span>
@@ -67,21 +78,34 @@ const NavigationBar = () => {
             <div className="buttons">
               {!isLoggedIn ? (
                 <>
-                  <a className="button is-dark" onClick={() => {navigate("/signup")
-                    setIsActive(false)}
-                  }>
+                  <a
+                    className="button is-dark"
+                    onClick={() => {
+                      navigate("/signup");
+                      setIsActive(false);
+                    }}
+                  >
                     <strong>Sign up</strong>
                   </a>
-                  <a className="button is-link" onClick={() => {navigate("/login")
-                  setIsActive(false)}
-                  }>
+                  <a
+                    className="button is-link"
+                    onClick={() => {
+                      navigate("/login");
+                      setIsActive(false);
+                    }}
+                  >
                     Log in
                   </a>
                 </>
               ) : (
                 <>
-                  <a className="button is-link" onClick={() => {navigate(`/${username}/budgets`)
-                setIsActive(false)}}>
+                  <a
+                    className="button is-link"
+                    onClick={() => {
+                      navigate(`/${username}/budgets`);
+                      setIsActive(false);
+                    }}
+                  >
                     <span className="icon">
                       <i className="fas fa-book"></i>
                     </span>
@@ -93,7 +117,7 @@ const NavigationBar = () => {
                       dispatch(signOut());
                       success("Cheers!");
                       navigate("/login");
-                      setIsActive(false)
+                      setIsActive(false);
                     }}
                   >
                     <span className="icon">

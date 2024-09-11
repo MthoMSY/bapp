@@ -103,12 +103,9 @@ export function CreateBudgetModal(props: Props) {
             </div>
 
             <div className="field is-grouped is-grouped-centered">
-            <button 
-              className="button" 
-              onClick={() => setShowModal(false)}
-            >
-              Cancel
-            </button>
+              <button className="button" onClick={() => setShowModal(false)}>
+                Cancel
+              </button>
               <button
                 type="submit"
                 className={`button is-link ${getIsLoadingClassName(
