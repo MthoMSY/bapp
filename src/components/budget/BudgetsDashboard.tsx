@@ -56,57 +56,6 @@ export const BudgetsDashboard = () => {
           <h1 className="title has-text-centered has-text-link">Budgets</h1>
         </div>
 
-        <div className="columns is-multiline">
-          <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
-            <div className="field">
-              <p className="control has-icons-left">
-                <input
-                  value={searchString}
-                  className="input"
-                  onChange={(e) => setSearchString(e.target.value)}
-                  type="text"
-                  placeholder="Search"
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-search" aria-hidden="true"></i>
-                </span>
-              </p>
-            </div>
-          </div>
-          <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
-            <div className="buttons are-small">
-              <button className="button is-link is-outlined">
-                <span className="icon is-small">
-                  <i className="fas fa-filter"></i>
-                </span>
-                <span>Add filters</span>
-              </button>
-              <button
-                onClick={() => setSearchString("")}
-                className="button is-warning is-outlined"
-              >
-                <span className="icon is-small">
-                  <i className="fas fa-power-off"></i>
-                </span>
-                <span>Reset filters</span>
-              </button>
-            </div>
-          </div>
-          <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
-            <button
-              className="button is-link is-outlined is-fullwidth"
-              onClick={() => setShowCreateBudgetModal(true)}
-            >
-              <span className="icon">
-                <i className="fas fa-plus-square"></i>
-              </span>
-              <span>
-                <strong>Create Budget</strong>
-              </span>
-            </button>
-          </div>
-        </div>
-
         <BudgetsDisplay
           budgets={displayBudgets}
           updateBudgets={refreshBudgets}
