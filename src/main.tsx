@@ -12,7 +12,6 @@ import { ProtectedRoute } from "./auth/ProtectedRoute";
 import { BudgetsDashboard } from "./components/budget/BudgetsDashboard";
 import { Home } from "./components/Home";
 import About from "./components/About";
-import { Blogs } from "./components/Blogs";
 
 const router = createBrowserRouter([
   {
@@ -27,10 +26,6 @@ const router = createBrowserRouter([
       {
         path: "about",
         element: <About />,
-      },
-      {
-        path: "blogs",
-        element: <Blogs />,
       },
       {
         path: "signup",

@@ -14,12 +14,6 @@ const NavigationBar = () => {
   return (
     <nav className="navbar" role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
-        <a className="navbar-item" onClick={() => {
-              navigate("/");
-            }}>
-          <strong>Easy Budget</strong>
-        </a>
-
         <a
           role="button"
           className={`navbar-burger burger ${isActive ? "is-active" : ""}`}
@@ -58,18 +52,6 @@ const NavigationBar = () => {
               <i className="fas fa-info"></i>
             </span>
             <span>About</span>
-          </a>
-          <a
-            className="navbar-item"
-            onClick={() => {
-              navigate("/blogs");
-              setIsActive(false);
-            }}
-          >
-            <span className="icon">
-              <i className="fab fa-blogger"></i>
-            </span>
-            <span>Blogs</span>
           </a>
         </div>
 
