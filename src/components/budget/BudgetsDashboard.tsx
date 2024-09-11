@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Budget } from "../../types/budget";
-import { BudgetModal } from "./CreateBudgetModal";
+import { CreateBudgetModal } from "./CreateBudgetModal";
 import { fetchBudgets } from "../../features/budget/budgetSlice";
 import { BudgetsDisplay } from "./item/BudgetsDisplay";
 import { signOut } from "../../features/user/userSlice";
@@ -11,7 +11,7 @@ export const BudgetsDashboard = () => {
   const { budgets, loading } = useAppSelector((state) => state.budget);
 
   const [displayBudgets, setDisplayBudgets] = useState<Budget[]>(budgets);
-  const [searchString, setSearchString] = useState<string>("");
+  const [searchString] = useState<string>("");
   const [showCreateBudgetModal, setShowCreateBudgetModal] =
     useState<boolean>(false);
 
@@ -49,11 +49,15 @@ export const BudgetsDashboard = () => {
   return (
     <>
       {showCreateBudgetModal && (
-        <BudgetModal setShowModal={setShowCreateBudgetModal} />
+        <CreateBudgetModal setShowModal={setShowCreateBudgetModal} />
       )}
       <div className="container is-fluid">
-        <div className="content is-medium">
-          <h1 className="title has-text-centered has-text-link">Budgets</h1>
+        <div className="content is-medium is-mobile-hidden">
+          <p className="has-text-centered">
+            <span className="has-text-weight-bold">Hey {username.length > 10 ? username.slice(0, 10) + "..." : username} ! <br />
+            Welcome to easy budgets
+            </span>
+          </p>
         </div>
 
         <BudgetsDisplay

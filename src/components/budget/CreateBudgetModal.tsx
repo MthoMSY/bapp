@@ -14,7 +14,7 @@ type FormValues = {
   description: string;
 };
 
-export function BudgetModal(props: Props) {
+export function CreateBudgetModal(props: Props) {
   const { setShowModal } = props;
   const dispatch = useAppDispatch();
   const { success, error } = useAppToast();

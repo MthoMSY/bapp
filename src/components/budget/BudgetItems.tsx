@@ -1,5 +1,4 @@
-import { useCallback, useMemo } from "react";
-import { useEffect, useState } from "react";
+import { useCallback, useMemo, useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Item } from "../../types/item";
 import { useLocation, useParams } from "react-router-dom";
@@ -100,54 +99,51 @@ export const BudgetItems = () => {
         />
       )}
       <div className="container is-fluid budget-items-container">
-        <div className="columns is-multiline">
-          <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
-            <div className="field">
-              <p className="control has-icons-left">
-                <input
-                  value={searchString}
-                  className="input"
-                  onChange={(e) => setSearchString(e.target.value)}
-                  type="text"
-                  placeholder="Search items"
-                />
-                <span className="icon is-small is-left">
-                  <i className="fas fa-search" aria-hidden="true"></i>
-                </span>
-              </p>
+        <div className="box">
+          <div className="columns is-multiline">
+            <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
+              <div className="field has-addons">
+                <div className="control is-expanded">
+                  <input
+                    value={searchString}
+                    className="input"
+                    onChange={(e) => setSearchString(e.target.value)}
+                    type="text"
+                    placeholder="Search"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
-            <div className="buttons are-small">
-              <button className="button is-link is-outlined">
-                <span className="icon is-small">
-                  <i className="fas fa-filter"></i>
-                </span>
-                <span>Add filters</span>
-              </button>
+            <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
+              <div className="buttons">
+                <button className="button is-link is-outlined">
+                  <span className="icon is-small">
+                    <i className="fas fa-filter"></i>
+                  </span>
+                  <span>Add filters</span>
+                </button>
+                <button
+                  onClick={() => setSearchString("")}
+                  className="button is-warning is-outlined"
+                >
+                  <span className="icon is-small">
+                    <i className="fas fa-power-off"></i>
+                  </span>
+                  <span>Reset filters</span>
+                </button>
+              </div>
+            </div>
+            <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
               <button
-                onClick={() => setSearchString("")}
-                className="button is-warning is-outlined"
+                className="button is-link is-fullwidth"
+                onClick={() => setShowAddItemModal(true)}
               >
-                <span className="icon is-small">
-                  <i className="fas fa-power-off"></i>
+                <span className="icon">
+                  <i className="fas fa-plus-square"></i>
                 </span>
-                <span>Reset filters</span>
+                <span>Create Item</span>
               </button>
             </div>
-          </div>
-          <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
-            <button
-              className="button is-link is-outlined is-fullwidth"
-              onClick={() => setShowAddItemModal(true)}
-            >
-              <span className="icon">
-                <i className="fas fa-plus-square"></i>
-              </span>
-              <span>
-                <strong>Create Item</strong>
-              </span>
-            </button>
           </div>
         </div>
 
@@ -159,16 +155,16 @@ export const BudgetItems = () => {
           isLoadingItems={isLoadingItems}
         />
 
+        {/* Pagination */}
         <nav
-          className="pagination is-rounded is-small is-centered mb-5"
+          className="pagination is-rounded is-centered mb-5"
           role="navigation"
           aria-label="pagination"
         >
           <a
             className="pagination-previous"
             onClick={() => {
-              if (currentItemsPage === pageNumbers[0]) return;
-              setCurrentItemsPage(currentItemsPage - 1);
+              if (currentItemsPage > 1) setCurrentItemsPage(currentItemsPage - 1);
             }}
           >
             Previous
@@ -176,32 +172,24 @@ export const BudgetItems = () => {
           <a
             className="pagination-next"
             onClick={() => {
-              if (currentItemsPage === pageNumbers[pageNumbers.length - 1])
-                setCurrentItemsPage(pageNumbers[0]);
-              else setCurrentItemsPage(currentItemsPage + 1);
+              if (currentItemsPage < pageNumbers.length) setCurrentItemsPage(currentItemsPage + 1);
             }}
           >
             Next page
           </a>
-          <ul className="pagination-list is-hidden-mobile">
-            {pageNumbers.map((page) => {
-              const isCurrent: string =
-                page === currentItemsPage ? "is-current" : "";
-              return (
-                <li key={page}>
-                  <a
-                    className={`pagination-link ${isCurrent}`}
-                    aria-label={`Page ${page}`}
-                    aria-current="page"
-                    onClick={() => {
-                      setCurrentItemsPage(page);
-                    }}
-                  >
-                    {page}
-                  </a>
-                </li>
-              );
-            })}
+          <ul className="pagination-list">
+            {pageNumbers.map((page) => (
+              <li key={page}>
+                <a
+                  className={`pagination-link ${page === currentItemsPage ? 'is-current' : ''}`}
+                  aria-label={`Page ${page}`}
+                  aria-current={page === currentItemsPage ? "page" : undefined}
+                  onClick={() => setCurrentItemsPage(page)}
+                >
+                  {page}
+                </a>
+              </li>
+            ))}
           </ul>
         </nav>
       </div>

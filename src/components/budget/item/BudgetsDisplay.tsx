@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Budget } from "../../../types/budget";
 import { useState } from "react";
 import { DeleteBudgetConfirmationModal } from "../DeleteBudgetConfirmationModal";
-import { BudgetModal } from "../CreateBudgetModal";
+import { CreateBudgetModal } from "../CreateBudgetModal";
 
 interface Props {
   budgets: Budget[];
@@ -44,7 +44,7 @@ export const BudgetsDisplay = (props: Props) => {
   return (
     <div className="container">
       {showCreateBudgetModal && (
-        <BudgetModal setShowModal={setShowCreateBudgetModal} />
+        <CreateBudgetModal setShowModal={setShowCreateBudgetModal} />
       )}
       <div className="box mb-4">
         <div className="columns is-multiline is-mobile">

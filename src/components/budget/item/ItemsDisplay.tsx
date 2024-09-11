@@ -16,20 +16,9 @@ const ItemsDisplay = (props: Props) => {
   const { items, updateBudgetItems, budgetId, totalCost, isLoadingItems } = props;
   const [selectedItem, setSelectedItem] = useState<undefined | Item>(undefined);
   const [showDeleteBudgetItemConfirmationModal, setShowDeleteBudgetItemConfirmationModal] = useState<boolean>(false);
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set());
-
-  const toggleItemExpansion = (itemId: string) => {
-    const newExpandedItems = new Set(expandedItems);
-    if (newExpandedItems.has(itemId)) {
-      newExpandedItems.delete(itemId);
-    } else {
-      newExpandedItems.add(itemId);
-    }
-    setExpandedItems(newExpandedItems);
-  };
 
   return (
-    <div className="table-container">
+    <div className="box">
       {showDeleteBudgetItemConfirmationModal && selectedItem && (
         <DeleteBudgetItemConfirmationModal
           itemId={selectedItem.id}
@@ -45,50 +34,38 @@ const ItemsDisplay = (props: Props) => {
           Total: R{totalCost.toString()}
         </p>
       </div>
-      {!isLoadingItems && (
-        <div className="table-wrapper">
-          <table className="table is-fullwidth is-striped is-narrow is-hoverable">
-            <thead>
-              <tr>
-                <th>Item</th>
-                <th className="is-hidden-mobile">Description</th>
-                <th className="is-hidden-mobile">Category</th>
-                <th>Price</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item) => (
-                <tr key={item.id} className={expandedItems.has(item.id) ? "is-expanded" : ""}>
-                  <td onClick={() => toggleItemExpansion(item.id)}>
-                    {item.name}
-                    <span className="icon is-small ml-2">
-                      <i className={`fas fa-chevron-${expandedItems.has(item.id) ? 'up' : 'down'}`}></i>
+      {!isLoadingItems ? (
+        <div className="columns is-multiline">
+          {items.map((item) => (
+            <div key={item.id} className="column is-one-third-desktop is-half-tablet is-full-mobile">
+              <div className="card h-100">
+                <div className="card-content">
+                  <div className="content">
+                    <p className="title is-5">{item.name}</p>
+                    <p className="subtitle is-6">{item.category}</p>
+                    <p className="has-text-weight-bold">R{item.cost}</p>
+                    <p>{item.description}</p>
+                  </div>
+                </div>
+                <footer className="card-footer">
+                  <button
+                    className="card-footer-item button is-danger is-light"
+                    onClick={() => {
+                      setSelectedItem(item);
+                      setShowDeleteBudgetItemConfirmationModal(true);
+                    }}
+                  >
+                    <span className="icon">
+                      <i className="fas fa-trash-alt"></i>
                     </span>
-                  </td>
-                  <td className="is-hidden-mobile">{item.description}</td>
-                  <td className="is-hidden-mobile">{item.category}</td>
-                  <td>R{item.cost}</td>
-                  <td>
-                    <button
-                      className="button is-small is-danger is-light"
-                      onClick={() => {
-                        setSelectedItem(item);
-                        setShowDeleteBudgetItemConfirmationModal(true);
-                      }}
-                    >
-                      <span className="icon is-small">
-                        <i className="fas fa-trash-alt"></i>
-                      </span>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    <span>Delete</span>
+                  </button>
+                </footer>
+              </div>
+            </div>
+          ))}
         </div>
-      )}
-      {isLoadingItems && (
+      ) : (
         <progress className="progress is-large is-white" max="100">
           loading items...
         </progress>

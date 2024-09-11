@@ -20,10 +20,32 @@
 
 .budget-items-container {
   padding-bottom: 3rem; /* Adds padding at the bottom of the container */
+  margin-top: 1.5rem;
+}
+
+.budget-items-container .box {
+  margin-bottom: 1.5rem;
 }
 
 @media screen and (max-width: 768px) {
-  .budget-items-container {
-    padding-bottom: 2rem; /* Slightly less padding on mobile */
+  .budget-items-container .buttons {
+    justify-content: flex-start;
+  }
+}
+
+.pagination-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.pagination-list li {
+  display: inline-block;
+  margin: 0 0.25rem;
+}
+
+@media screen and (max-width: 768px) {
+  .pagination-list {
+    display: none;
   }
 }
