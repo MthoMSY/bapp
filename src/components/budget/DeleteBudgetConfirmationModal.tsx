@@ -50,7 +50,7 @@ export const DeleteBudgetConfirmationModal = (props: Props) => {
         <section className="modal-card-body">
           <div className="content has-text-centered">
             <h5>
-              Are you sure you want to delete <a>{budgetName}</a> from your
+              Are you sure you want to delete <a className="has-text-danger">{budgetName}</a> from your
               budgets?
             </h5>
           </div>
