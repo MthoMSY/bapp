@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks/redux";
 import { Budget } from "../../types/budget";
 import { CreateBudgetModal } from "./CreateBudgetModal";
 import { fetchBudgets } from "../../features/budget/budgetSlice";
-import { BudgetsDisplay } from "./item/BudgetsDisplay";
+import { BudgetsDisplay } from "./BudgetsDisplay";
 import { signOut } from "../../features/user/userSlice";
 
 export const BudgetsDashboard = () => {
