@@ -28,10 +28,10 @@ export const Home = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveIndex((prevIndex) => (prevIndex + 1) % cards.length);
-    }, 5000); // Change slide every 5 seconds
+    }, 10000); // Change slide every 10 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [cards.length]);
 
   return (
     <section className="section">
@@ -45,23 +45,27 @@ export const Home = () => {
             ))}
           </ul>
         </div>
-          <div className="card">
-            <header className="card-header">
-              <p className="card-header-title">{cards[activeIndex].title}</p>
-            </header>
-            <div className="card-content">
-              <div className="content">{cards[activeIndex].content}</div>
+        <div className="columns is-centered">
+          <div className="column is-8">
+            <div className="card is-large">
+              <header className="card-header">
+                <p className="card-header-title is-size-3">{cards[activeIndex].title}</p>
+              </header>
+              <div className="card-content">
+                <div className="content is-size-5">{cards[activeIndex].content}</div>
+              </div>
             </div>
           </div>
+        </div>
         <div className="buttons is-centered mt-4">
           <button
-            className="button is-primary"
+            className="button is-primary is-medium"
             onClick={() => setActiveIndex((prevIndex) => (prevIndex - 1 + cards.length) % cards.length)}
           >
             Previous
           </button>
           <button
-            className="button is-primary"
+            className="button is-primary is-medium"
             onClick={() => setActiveIndex((prevIndex) => (prevIndex + 1) % cards.length)}
           >
             Next
