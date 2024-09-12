@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Budget } from "../../types/budget";
 import { DeleteBudgetConfirmationModal } from "./DeleteBudgetConfirmationModal";
 import { CreateBudgetModal } from "./CreateBudgetModal";
+import { EditBudgetModal } from "./EditBudgetModal";  // Add this import
 import { formatDate } from "../utils";
 
 interface Props {
@@ -18,6 +19,7 @@ export const BudgetsDisplay = (props: Props) => {
     showDeleteBudgetConfirmationModal,
     setShowDeleteBudgetConfirmationModal,
   ] = useState<boolean>(false);
+  const [showEditBudgetModal, setShowEditBudgetModal] = useState<boolean>(false);  // Add this state
   const [selectedBudget, setSelectedBudget] = useState<Budget | undefined>(
     undefined
   );
@@ -47,6 +49,14 @@ export const BudgetsDisplay = (props: Props) => {
   const resetFilters = () => {
     setSearchTerm("");
     setFilterOption("all");
+  };
+
+  const handleUpdateBudget = (updatedBudget: Budget) => {
+    // Implement the logic to update the budget in your state or API
+    // This is just a placeholder implementation
+    const updatedBudgets = budgets.map(b => b.id === updatedBudget.id ? updatedBudget : b);
+    console.log(updatedBudgets);
+    updateBudgets();  // Assuming this function refreshes the budgets from the API
   };
 
   return (
@@ -117,6 +127,13 @@ export const BudgetsDisplay = (props: Props) => {
           updateBudgets={updateBudgets}
         />
       )}
+      {showEditBudgetModal && selectedBudget && (
+        <EditBudgetModal
+          budget={selectedBudget}
+          setShowModal={setShowEditBudgetModal}
+          updateBudget={handleUpdateBudget}
+        />
+      )}
       {!isLoadingBudgets && (
         <div className="columns is-multiline is-mobile">
           {filteredBudgets.map((budget) => (
@@ -170,6 +187,7 @@ export const BudgetsDisplay = (props: Props) => {
                     onClick={(e) => {
                       e.preventDefault();
                       setSelectedBudget(budget);
+                      setShowEditBudgetModal(true);
                     }}
                   >
                     <span className="icon has-text-info">
