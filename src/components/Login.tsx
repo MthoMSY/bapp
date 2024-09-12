@@ -112,7 +112,7 @@ export function Login() {
                   )}`}
                   id="login"
                 >
-                  Login
+                  Sign In
                 </button>
               </div>
             </div>

@@ -1,3 +1,4 @@
+import Decimal from "decimal.js";
 import { Item } from "./item";
 
 export interface Budget {
@@ -7,4 +8,5 @@ export interface Budget {
   name: string
   updatedAt: Date | undefined;
   items: Item[]
+  limit: Decimal | undefined;
 }

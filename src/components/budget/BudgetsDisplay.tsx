@@ -1,8 +1,11 @@
+import React, { useState } from 'react';
+import './BudgetsDisplay.css';  // Add this line
 import { useNavigate } from "react-router-dom";
-import { Budget } from "../../../types/budget";
-import { useState } from "react";
-import { DeleteBudgetConfirmationModal } from "../DeleteBudgetConfirmationModal";
-import { CreateBudgetModal } from "../CreateBudgetModal";
+import { Budget } from "../../types/budget";
+import { DeleteBudgetConfirmationModal } from "./DeleteBudgetConfirmationModal";
+import { CreateBudgetModal } from "./CreateBudgetModal";
+import { EditBudgetModal } from "./EditBudgetModal";  // Add this import
+import { formatDate } from "../utils";
 
 interface Props {
   budgets: Budget[];
@@ -12,8 +15,14 @@ interface Props {
 
 export const BudgetsDisplay = (props: Props) => {
   const { budgets, updateBudgets, isLoadingBudgets } = props;
-  const [showDeleteBudgetConfirmationModal, setShowDeleteBudgetConfirmationModal] = useState<boolean>(false);
-  const [selectedBudget, setSelectedBudget] = useState<Budget | undefined>(undefined);
+  const [
+    showDeleteBudgetConfirmationModal,
+    setShowDeleteBudgetConfirmationModal,
+  ] = useState<boolean>(false);
+  const [showEditBudgetModal, setShowEditBudgetModal] = useState<boolean>(false);  // Add this state
+  const [selectedBudget, setSelectedBudget] = useState<Budget | undefined>(
+    undefined
+  );
   const [searchTerm, setSearchTerm] = useState("");
   const [filterOption, setFilterOption] = useState("all");
   const [showCreateBudgetModal, setShowCreateBudgetModal] = useState(false);
@@ -29,8 +38,9 @@ export const BudgetsDisplay = (props: Props) => {
   };
 
   const filteredBudgets = budgets.filter((budget) => {
-    const matchesSearch = budget.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          budget.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch =
+      budget.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      budget.description.toLowerCase().includes(searchTerm.toLowerCase());
     if (filterOption === "all") return matchesSearch;
     // Add more filter options as needed
     return matchesSearch;
@@ -39,6 +49,14 @@ export const BudgetsDisplay = (props: Props) => {
   const resetFilters = () => {
     setSearchTerm("");
     setFilterOption("all");
+  };
+
+  const handleUpdateBudget = (updatedBudget: Budget) => {
+    // Implement the logic to update the budget in your state or API
+    // This is just a placeholder implementation
+    const updatedBudgets = budgets.map(b => b.id === updatedBudget.id ? updatedBudget : b);
+    console.log(updatedBudgets);
+    updateBudgets();  // Assuming this function refreshes the budgets from the API
   };
 
   return (
@@ -91,7 +109,10 @@ export const BudgetsDisplay = (props: Props) => {
             </div>
           </div>
           <div className="column is-12-mobile is-6-tablet is-3-desktop">
-            <button className="button is-info is-fullwidth" onClick={resetFilters}>
+            <button
+              className="button is-info is-fullwidth"
+              onClick={resetFilters}
+            >
               Reset Filters
             </button>
           </div>
@@ -106,16 +127,44 @@ export const BudgetsDisplay = (props: Props) => {
           updateBudgets={updateBudgets}
         />
       )}
+      {showEditBudgetModal && selectedBudget && (
+        <EditBudgetModal
+          budget={selectedBudget}
+          setShowModal={setShowEditBudgetModal}
+          updateBudget={handleUpdateBudget}
+        />
+      )}
       {!isLoadingBudgets && (
         <div className="columns is-multiline is-mobile">
           {filteredBudgets.map((budget) => (
-            <div key={budget.id} className="column is-12-mobile is-6-tablet is-4-desktop is-3-widescreen">
+            <div
+              key={budget.id}
+              className="column is-12-mobile is-6-tablet is-4-desktop is-3-widescreen"
+            >
               <div className="card">
                 <header className="card-header">
                   <p className="card-header-title is-centered">{budget.name}</p>
                 </header>
                 <div className="card-content">
-                  <div className="content has-text-centered">{budget.description}</div>
+                  <div className="content">
+                    <span className="has-text-weight-bold">Limit:</span>{" "}
+                    {budget.limit ? budget.limit.toString() : "No limit"}
+                  </div>
+                  <div className="content">
+                    <span className="has-text-weight-bold">Description:</span>{" "}
+                    <span 
+                      className="has-tooltip-multiline has-tooltip-right no-underline" 
+                      data-tooltip={budget.description}
+                    >
+                      {budget.description.length > 10
+                        ? budget.description.slice(0, 10) + "..."
+                        : budget.description}
+                    </span>
+                  </div>
+                  <div className="content">
+                    <span className="has-text-weight-bold">Created:</span>{" "}
+                    {formatDate(budget.createdAt)}
+                  </div>
                 </div>
                 <footer className="card-footer">
                   <a
@@ -128,9 +177,23 @@ export const BudgetsDisplay = (props: Props) => {
                     }}
                   >
                     <span className="icon">
-                      <i className="fas fa-eye"></i>
+                      <i className="fas fa-eye "></i>
                     </span>
                     <span className="is-hidden-mobile">View</span>
+                  </a>
+                  <a
+                    href="#"
+                    className="card-footer-item"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedBudget(budget);
+                      setShowEditBudgetModal(true);
+                    }}
+                  >
+                    <span className="icon has-text-info">
+                      <i className="fas fa-pencil-alt pr-1"></i>
+                    </span>
+                    <span className="is-hidden-mobile has-text-info">Edit</span>
                   </a>
                   <a
                     href="#"
