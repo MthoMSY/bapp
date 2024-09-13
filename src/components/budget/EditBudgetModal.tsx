@@ -116,6 +116,11 @@ export const EditBudgetModal: React.FC<Props> = ({ budget, setShowModal, updateB
                   step="0.01"
                   {...register("limit", {
                     valueAsNumber: true,
+                    validate: {
+                      positive: (fieldValue: number) => {
+                        return fieldValue >= 0 || "Negative limit is not allowed";
+                      },
+                    },
                   })}
                 />
               </div>

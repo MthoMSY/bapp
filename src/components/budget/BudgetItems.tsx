@@ -11,7 +11,7 @@ import "./BudgetItems.css"; // Make sure to create this CSS file
 export const BudgetItems = () => {
   const location = useLocation();
   const { id } = location.state;
-  const { budgetName } = useParams();
+  const { budgetName, budgetLimit } = useParams();
   const { username, token } = useAppSelector((state) => state.user);
 
   const [items, setItems] = useState<Item[]>([]);
@@ -153,6 +153,8 @@ export const BudgetItems = () => {
           updateBudgetItems={updateItems}
           totalCost={getTotal()}
           isLoadingItems={isLoadingItems}
+          budgetLimit={budgetLimit ? new Decimal(budgetLimit) : new Decimal(0)}
+          budgetName={budgetName ?? ''}
         />
 
         {/* Pagination */}
