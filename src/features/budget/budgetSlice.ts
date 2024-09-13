@@ -73,6 +73,18 @@ export const deleteBudget = createAsyncThunk(
   }
 );
 
+export const updateUserBudget = createAsyncThunk(
+  "budget/update",
+  async (request: { payload: { id: string; name: string; description: string, limit: number }; token: string }) => {
+    const response = await api.patch(`/budget/${request.payload.id}`, request.payload, {
+      headers: {
+        Authorization: `Bearer ${request.token}`,
+      },
+    });
+    return response.data;
+  }
+);
+
 export const getBudgetItems = createAsyncThunk(
   "budget/items",
   async (request: { budgetId: string; token: string }) => {
@@ -166,10 +178,10 @@ const budgetSlice = createSlice({
         action.error.message || "Error occurred when deleting budget item";
     });
 
-    builder.addCase(deleteBudget.fulfilled, (state) => {
+    builder.addCase(deleteBudget.fulfilled, (state, action) => {
       state.loading = false;
       state.error = "";
-      // state.budgets = state.budgets.filter((budget) => budget.id !== action.payload.id);
+      state.budgets = state.budgets.filter((budget) => budget.id !== action.payload.id);
     });
     builder.addCase(deleteBudget.pending, (state) => {
       state.loading = true;
@@ -179,6 +191,25 @@ const budgetSlice = createSlice({
       state.loading = false;
       state.error =
         action.error.message || "Error occurred when deleting budget";
+    });
+    builder.addCase(updateUserBudget.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = "";
+      state.budgets = state.budgets.map((budget) => {
+        if (budget.id === action.payload.id) {
+          return action.payload;
+        }
+        return budget;
+      }); 
+    });
+    builder.addCase(updateUserBudget.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(updateUserBudget.rejected, (state, action) => {
+      state.loading = false;
+      state.error =
+        action.error.message || "Error occurred when updating user budget";
     });
   },
 });

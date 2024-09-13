@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import './BudgetsDisplay.css';  // Add this line
+import './BudgetsDisplay.css'; 
 import { useNavigate } from "react-router-dom";
 import { Budget } from "../../types/budget";
 import { DeleteBudgetConfirmationModal } from "./DeleteBudgetConfirmationModal";
 import { CreateBudgetModal } from "./CreateBudgetModal";
-import { EditBudgetModal } from "./EditBudgetModal";  // Add this import
+import { EditBudgetModal } from "./EditBudgetModal";  
 import { formatDate } from "../utils";
+import Decimal from 'decimal.js';
 
 interface Props {
   budgets: Budget[];
@@ -31,9 +32,9 @@ export const BudgetsDisplay = (props: Props) => {
   const sanitizeBudgetNameForUrl = (s: string): string => {
     return s.toLowerCase().trim().replaceAll(" ", "_");
   };
-  const navigateToBudget = (budgetId: string, budgetName: string): void => {
+  const navigateToBudget = (budgetId: string, budgetName: string, budgetLimit: Decimal): void => {
     navigate(`/budget/${sanitizeBudgetNameForUrl(budgetName)}/items`, {
-      state: { id: budgetId },
+      state: { id: budgetId, limit: budgetLimit },
     });
   };
 
@@ -49,14 +50,6 @@ export const BudgetsDisplay = (props: Props) => {
   const resetFilters = () => {
     setSearchTerm("");
     setFilterOption("all");
-  };
-
-  const handleUpdateBudget = (updatedBudget: Budget) => {
-    // Implement the logic to update the budget in your state or API
-    // This is just a placeholder implementation
-    const updatedBudgets = budgets.map(b => b.id === updatedBudget.id ? updatedBudget : b);
-    console.log(updatedBudgets);
-    updateBudgets();  // Assuming this function refreshes the budgets from the API
   };
 
   return (
@@ -131,7 +124,7 @@ export const BudgetsDisplay = (props: Props) => {
         <EditBudgetModal
           budget={selectedBudget}
           setShowModal={setShowEditBudgetModal}
-          updateBudget={handleUpdateBudget}
+          updateBudgets={updateBudgets}
         />
       )}
       {!isLoadingBudgets && (
@@ -156,8 +149,8 @@ export const BudgetsDisplay = (props: Props) => {
                       className="has-tooltip-multiline has-tooltip-right no-underline" 
                       data-tooltip={budget.description}
                     >
-                      {budget.description.length > 10
-                        ? budget.description.slice(0, 10) + "..."
+                      {budget.description.length > 15
+                        ? budget.description.slice(0, 15) + "..."
                         : budget.description}
                     </span>
                   </div>
@@ -173,7 +166,7 @@ export const BudgetsDisplay = (props: Props) => {
                     onClick={(e) => {
                       e.preventDefault();
                       setSelectedBudget(budget);
-                      navigateToBudget(budget.id, budget.name);
+                      navigateToBudget(budget.id, budget.name, budget.limit);
                     }}
                   >
                     <span className="icon">
