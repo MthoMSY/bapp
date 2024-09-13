@@ -148,8 +148,8 @@ export const BudgetsDisplay = (props: Props) => {
                       className="has-tooltip-multiline has-tooltip-right no-underline" 
                       data-tooltip={budget.description}
                     >
-                      {budget.description.length > 10
-                        ? budget.description.slice(0, 10) + "..."
+                      {budget.description.length > 15
+                        ? budget.description.slice(0, 15) + "..."
                         : budget.description}
                     </span>
                   </div>
