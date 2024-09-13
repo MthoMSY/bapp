@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import './BudgetsDisplay.css';  // Add this line
+import './BudgetsDisplay.css'; 
 import { useNavigate } from "react-router-dom";
 import { Budget } from "../../types/budget";
 import { DeleteBudgetConfirmationModal } from "./DeleteBudgetConfirmationModal";
 import { CreateBudgetModal } from "./CreateBudgetModal";
-import { EditBudgetModal } from "./EditBudgetModal";  // Add this import
+import { EditBudgetModal } from "./EditBudgetModal";  
 import { formatDate } from "../utils";
 
 interface Props {
@@ -49,14 +49,6 @@ export const BudgetsDisplay = (props: Props) => {
   const resetFilters = () => {
     setSearchTerm("");
     setFilterOption("all");
-  };
-
-  const handleUpdateBudget = (updatedBudget: Budget) => {
-    // Implement the logic to update the budget in your state or API
-    // This is just a placeholder implementation
-    const updatedBudgets = budgets.map(b => b.id === updatedBudget.id ? updatedBudget : b);
-    console.log(updatedBudgets);
-    updateBudgets();  // Assuming this function refreshes the budgets from the API
   };
 
   return (
@@ -131,7 +123,7 @@ export const BudgetsDisplay = (props: Props) => {
         <EditBudgetModal
           budget={selectedBudget}
           setShowModal={setShowEditBudgetModal}
-          updateBudget={handleUpdateBudget}
+          updateBudgets={updateBudgets}
         />
       )}
       {!isLoadingBudgets && (

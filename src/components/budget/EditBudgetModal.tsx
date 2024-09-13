@@ -1,39 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Budget } from '../../types/budget';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux';
+import { useAppToast } from '../../hooks/useAppToast';
+import { useForm } from 'react-hook-form';
+import { updateUserBudget } from '../../features/budget/budgetSlice';
 import Decimal from 'decimal.js';
 
 interface Props {
   budget: Budget;
   setShowModal: (show: boolean) => void;
-  updateBudget: (updatedBudget: Budget) => void;
+  updateBudgets: () => void;
 }
 
-export const EditBudgetModal: React.FC<Props> = ({ budget, setShowModal, updateBudget }) => {
-  const [name, setName] = useState(budget.name);
-  const [description, setDescription] = useState(budget.description);
-  const [limit, setLimit] = useState(budget.limit?.toString() || '');
-  const [error, setError] = useState('');
+interface FormValues {
+  name: string;
+  description: string;
+  limit: number;
+}
 
-  useEffect(() => {
-    setName(budget.name);
-    setDescription(budget.description);
-    setLimit(budget.limit?.toString() || '');
-  }, [budget]);
+export const EditBudgetModal: React.FC<Props> = ({ budget, setShowModal, updateBudgets }) => {
+  const [updateBudgetPending, setUpdateBudgetPending] = useState(false);
+  
+  const { success, error } = useAppToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name.trim()) {
-      setError('Name is required');
-      return;
+  const { token } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
+  
+  
+  const form = useForm<FormValues>({ mode: "all" ,
+    defaultValues: {
+      name: budget.name,
+      description: budget.description,
+      limit: new Decimal(budget.limit.toString()).toNumber(), // check if we lose precision here
     }
-    const updatedBudget: Budget = {
-      ...budget,
-      name: name.trim(),
-      description: description.trim(),
-      limit: limit ? new Decimal(limit) : undefined,
-    };
-    updateBudget(updatedBudget);
-    setShowModal(false);
+  });
+  const { register, handleSubmit, formState } = form;
+  const { errors, isValid } = formState;
+  const onConfirm = (formValues: FormValues) => {
+    setUpdateBudgetPending(true);
+    dispatch(updateUserBudget({ token, payload: { ...formValues, id: budget.id } }))
+      .unwrap()
+      .then(() => {
+        success(`Successfully added ${formValues.name} to your budget`);
+        updateBudgets();
+      })
+      .catch(() => {
+        error("Error adding item to your budget");    
+      })
+      .finally(() => {
+        setUpdateBudgetPending(false);
+        setShowModal(false);
+      });
   };
 
   return (
@@ -45,29 +62,51 @@ export const EditBudgetModal: React.FC<Props> = ({ budget, setShowModal, updateB
           <button className="delete" aria-label="close" onClick={() => setShowModal(false)}></button>
         </header>
         <section className="modal-card-body">
-          <form onSubmit={handleSubmit}>
+          <form id="editBudget" onSubmit={handleSubmit(onConfirm)}>
             <div className="field">
               <label className="label">Name</label>
               <div className="control">
                 <input
                   className="input"
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  {...register("name", {
+                    required: {
+                      message: "Name for your budget is required",
+                      value: true,
+                    },
+                    validate: {
+                      minLength: (fieldValue: string) => {
+                        return (
+                          fieldValue.length > 2 ||
+                          "Name of your item must be at least 3 characters"
+                        );
+                      },
+                    },
+                  })}
                   required
                 />
               </div>
+              <p className="help is-danger">{errors.name?.message}</p>
             </div>
             <div className="field">
               <label className="label">Description</label>
               <div className="control">
                 <textarea
                   className="textarea"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                    {...register("description", {
+                      required: {
+                        message: "Description for your budget is required",
+                        value: true,
+                      },
+                      minLength: {
+                        message: "Description of your budget must be at least 3 characters",
+                        value: 3,
+                      },
+                    })}
                 ></textarea>
               </div>
             </div>
+            <p className="help is-danger">{errors.description?.message}</p>
             <div className="field">
               <label className="label">Limit</label>
               <div className="control">
@@ -75,18 +114,18 @@ export const EditBudgetModal: React.FC<Props> = ({ budget, setShowModal, updateB
                   className="input"
                   type="number"
                   step="0.01"
-                  value={limit}
-                  onChange={(e) => setLimit(e.target.value)}
-                  placeholder="Optional"
+                  {...register("limit", {
+                    valueAsNumber: true,
+                  })}
                 />
               </div>
             </div>
-            {error && <p className="help is-danger">{error}</p>}
+            <p className="help is-danger">{errors.limit?.message}</p>
           </form>
         </section>
         <footer className="modal-card-foot is-flex is-justify-content-center">
             <div className="buttons">
-          <button className="button is-success" onClick={handleSubmit}>Save changes</button>
+          <button disabled={!isValid} form="editBudget" type="submit" className={`button is-success ${updateBudgetPending ? "is-loading" : ""}`}>Save changes</button>
           <button className="button" onClick={() => setShowModal(false)}>Cancel</button>
         </div>
         </footer>

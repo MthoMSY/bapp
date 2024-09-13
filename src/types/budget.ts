@@ -8,5 +8,5 @@ export interface Budget {
   name: string
   updatedAt: Date | undefined;
   items: Item[]
-  limit: Decimal | undefined;
+  limit: Decimal;
 }
