@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "../../api";
 import { Budget } from "../../types/budget";
 import { signOut } from "../user/userSlice";
+import Decimal from "decimal.js";
 
 interface BudgetState {
   error: string;
@@ -75,12 +76,19 @@ export const deleteBudget = createAsyncThunk(
 
 export const updateUserBudget = createAsyncThunk(
   "budget/update",
-  async (request: { payload: { id: string; name: string; description: string, limit: number }; token: string }) => {
-    const response = await api.patch(`/budget/${request.payload.id}`, request.payload, {
-      headers: {
-        Authorization: `Bearer ${request.token}`,
-      },
-    });
+  async (request: {
+    payload: { id: string; name: string; description: string; limit: number };
+    token: string;
+  }) => {
+    const response = await api.patch(
+      `/budget/${request.payload.id}`,
+      request.payload,
+      {
+        headers: {
+          Authorization: `Bearer ${request.token}`,
+        },
+      }
+    );
     return response.data;
   }
 );
@@ -114,6 +122,32 @@ export const createBudgetItem = createAsyncThunk(
       },
     });
 
+    return response.data;
+  }
+);
+
+export const updateBudgetItem = createAsyncThunk(
+  "budget/item/update",
+  async (request: {
+    itemId: string;
+    payload: {
+      name: string;
+      description: string;
+      cost: Decimal;
+      category: string;
+      budgetId: string;
+    };
+    token: string;
+  }) => {
+    const response = await api.patch(
+      `/item/${request.itemId}`,
+      request.payload,
+      {
+        headers: {
+          Authorization: `Bearer ${request.token}`,
+        },
+      }
+    );
     return response.data;
   }
 );
@@ -181,7 +215,9 @@ const budgetSlice = createSlice({
     builder.addCase(deleteBudget.fulfilled, (state, action) => {
       state.loading = false;
       state.error = "";
-      state.budgets = state.budgets.filter((budget) => budget.id !== action.payload.id);
+      state.budgets = state.budgets.filter(
+        (budget) => budget.id !== action.payload.id
+      );
     });
     builder.addCase(deleteBudget.pending, (state) => {
       state.loading = true;
@@ -200,7 +236,7 @@ const budgetSlice = createSlice({
           return action.payload;
         }
         return budget;
-      }); 
+      });
     });
     builder.addCase(updateUserBudget.pending, (state) => {
       state.loading = true;
@@ -210,6 +246,30 @@ const budgetSlice = createSlice({
       state.loading = false;
       state.error =
         action.error.message || "Error occurred when updating user budget";
+    });
+    builder.addCase(updateBudgetItem.fulfilled, (state, action) => {
+      state.loading = false;
+      state.error = "";
+      state.budgets = state.budgets.map((budget) => {
+        if (budget.id === action.payload.budgetId) {
+          return {
+            ...budget,
+            items: budget.items.map((item) =>
+              item.id === action.payload.id ? action.payload : item
+            ),
+          };
+        }
+        return budget;
+      });
+    });
+    builder.addCase(updateBudgetItem.pending, (state) => {
+      state.loading = true;
+      state.error = "";
+    });
+    builder.addCase(updateBudgetItem.rejected, (state, action) => {
+      state.loading = false;
+      state.error =
+        action.error.message || "Error occurred when updating budget item";
     });
   },
 });
