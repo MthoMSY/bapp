@@ -15,13 +15,13 @@ type FormValues = {
 export function SignUp() {
   const form = useForm<FormValues>({ mode: "all" });
   const { success, error } = useAppToast();
-  const { register, handleSubmit, formState, getValues } = form;
+  const { register, handleSubmit, formState, getValues, setValue } = form;
   const navigate = useNavigate();
   const { loading } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const minLengthValidation = (fieldValue: string, min: number): boolean => {
-    return fieldValue.length > min;
+    return fieldValue.length >= min;
   };
 
   const maxLengthValidation = (fieldValue: string): boolean => {
@@ -43,6 +43,16 @@ export function SignUp() {
         navigate("/login");
       })
       .catch(() => error("There was an error signing you up."));
+  };
+
+  const generatePassword = () => {
+    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
+    let password = "";
+    for (let i = 0; i < 9; i++) {
+      password += charset.charAt(Math.floor(Math.random() * charset.length));
+    }
+    setValue("password", password);
+    setValue("confirmedPassword", password);
   };
 
   const { errors } = formState;
@@ -149,6 +159,17 @@ export function SignUp() {
               <p className="help is-danger">
                 {errors.confirmedPassword?.message}
               </p>
+            </div>
+            <div className="field">
+              <div className="control">
+                <button
+                  type="button"
+                  className="button is-small is-info is-light"
+                  onClick={generatePassword}
+                >
+                  Generate Password
+                </button>
+              </div>
             </div>
             <div className="field">
               <div className="buttons is-centered">
