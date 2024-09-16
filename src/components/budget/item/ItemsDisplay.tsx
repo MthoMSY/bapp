@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Item } from "../../../types/item";
 import Decimal from "decimal.js";
 import { DeleteBudgetItemConfirmationModal } from "../DeleteBudgetItemConfirmationModal";
+import EditBudgetItemModal from "../EditBudgetItemModal";
 import "./ItemsDisplay.css";
 
 interface Props {
@@ -47,6 +48,7 @@ const ItemsDisplay = (props: Props) => {
     showDeleteBudgetItemConfirmationModal,
     setShowDeleteBudgetItemConfirmationModal,
   ] = useState<boolean>(false);
+  const [showEditBudgetItemModal, setShowEditBudgetItemModal] = useState<boolean>(false);
 
   return (
     <div className="box">
@@ -55,6 +57,14 @@ const ItemsDisplay = (props: Props) => {
           itemId={selectedItem.id}
           setShowModal={setShowDeleteBudgetItemConfirmationModal}
           itemName={selectedItem.name}
+          updateBudgetItems={updateBudgetItems}
+          budgetId={budgetId}
+        />
+      )}
+      {showEditBudgetItemModal && selectedItem && (
+        <EditBudgetItemModal
+          item={selectedItem}
+          setShowModal={setShowEditBudgetItemModal}
           updateBudgetItems={updateBudgetItems}
           budgetId={budgetId}
         />
@@ -129,18 +139,34 @@ const ItemsDisplay = (props: Props) => {
                   </div>
                 </div>
                 <footer className="card-footer">
-                  <button
-                    className="card-footer-item button is-danger is-light"
-                    onClick={() => {
-                      setSelectedItem(item);
-                      setShowDeleteBudgetItemConfirmationModal(true);
-                    }}
-                  >
-                    <span className="icon">
-                      <i className="fas fa-trash-alt"></i>
-                    </span>
-                    <span>Delete</span>
-                  </button>
+                  <div className="card-footer-item">
+                    <div className="buttons are-small">
+                      <button
+                        className="button is-primary is-outlined"
+                        onClick={() => {
+                          setSelectedItem(item);
+                          setShowEditBudgetItemModal(true);
+                        }}
+                      >
+                        <span className="icon">
+                          <i className="fas fa-edit"></i>
+                        </span>
+                        <span>Edit</span>
+                      </button>
+                      <button
+                        className="button is-danger is-outlined"
+                        onClick={() => {
+                          setSelectedItem(item);
+                          setShowDeleteBudgetItemConfirmationModal(true);
+                        }}
+                      >
+                        <span className="icon">
+                          <i className="fas fa-trash-alt"></i>
+                        </span>
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </div>
                 </footer>
               </div>
             </div>

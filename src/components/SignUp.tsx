@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signUp } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useAppToast } from "../hooks/useAppToast";
-import { getIsLoadingClassName } from "./utils";
+import { generatePassword, getIsLoadingClassName } from "./utils";
 import "./SignUp.css";
 
 type FormValues = {
@@ -15,13 +15,13 @@ type FormValues = {
 export function SignUp() {
   const form = useForm<FormValues>({ mode: "all" });
   const { success, error } = useAppToast();
-  const { register, handleSubmit, formState, getValues } = form;
+  const { register, handleSubmit, formState, getValues, setValue } = form;
   const navigate = useNavigate();
   const { loading } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
 
   const minLengthValidation = (fieldValue: string, min: number): boolean => {
-    return fieldValue.length > min;
+    return fieldValue.length >= min;
   };
 
   const maxLengthValidation = (fieldValue: string): boolean => {
@@ -43,6 +43,13 @@ export function SignUp() {
         navigate("/login");
       })
       .catch(() => error("There was an error signing you up."));
+  };
+
+  const setSystemGeneratedPassword = () => {
+    const password = generatePassword();
+    
+    setValue("password", password);
+    setValue("confirmedPassword", password);
   };
 
   const { errors } = formState;
@@ -149,6 +156,17 @@ export function SignUp() {
               <p className="help is-danger">
                 {errors.confirmedPassword?.message}
               </p>
+            </div>
+            <div className="field">
+              <div className="control">
+                <button
+                  type="button"
+                  className="button is-small is-info is-light"
+                  onClick={setSystemGeneratedPassword}
+                >
+                  Generate Password
+                </button>
+              </div>
             </div>
             <div className="field">
               <div className="buttons is-centered">

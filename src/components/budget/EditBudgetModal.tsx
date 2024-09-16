@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { Budget } from '../../types/budget';
-import { useAppDispatch, useAppSelector } from '../../hooks/redux';
-import { useAppToast } from '../../hooks/useAppToast';
-import { useForm } from 'react-hook-form';
-import { updateUserBudget } from '../../features/budget/budgetSlice';
-import Decimal from 'decimal.js';
+import React, { useState } from "react";
+import { Budget } from "../../types/budget";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux";
+import { useAppToast } from "../../hooks/useAppToast";
+import { useForm } from "react-hook-form";
+import { updateUserBudget } from "../../features/budget/budgetSlice";
+import Decimal from "decimal.js";
 
 interface Props {
   budget: Budget;
@@ -18,34 +18,40 @@ interface FormValues {
   limit: number;
 }
 
-export const EditBudgetModal: React.FC<Props> = ({ budget, setShowModal, updateBudgets }) => {
+export const EditBudgetModal: React.FC<Props> = ({
+  budget,
+  setShowModal,
+  updateBudgets,
+}) => {
   const [updateBudgetPending, setUpdateBudgetPending] = useState(false);
-  
+
   const { success, error } = useAppToast();
 
   const { token } = useAppSelector((state) => state.user);
   const dispatch = useAppDispatch();
-  
-  
-  const form = useForm<FormValues>({ mode: "all" ,
+
+  const form = useForm<FormValues>({
+    mode: "all",
     defaultValues: {
       name: budget.name,
       description: budget.description,
       limit: new Decimal(budget.limit.toString()).toNumber(), // check if we lose precision here
-    }
+    },
   });
   const { register, handleSubmit, formState } = form;
   const { errors, isValid } = formState;
   const onConfirm = (formValues: FormValues) => {
     setUpdateBudgetPending(true);
-    dispatch(updateUserBudget({ token, payload: { ...formValues, id: budget.id } }))
+    dispatch(
+      updateUserBudget({ token, payload: { ...formValues, id: budget.id } })
+    )
       .unwrap()
       .then(() => {
         success(`Successfully added ${formValues.name} to your budget`);
         updateBudgets();
       })
       .catch(() => {
-        error("Error adding item to your budget");    
+        error("Error adding item to your budget");
       })
       .finally(() => {
         setUpdateBudgetPending(false);
@@ -55,11 +61,18 @@ export const EditBudgetModal: React.FC<Props> = ({ budget, setShowModal, updateB
 
   return (
     <div className="modal is-active">
-      <div className="modal-background" onClick={() => setShowModal(false)}></div>
+      <div
+        className="modal-background"
+        onClick={() => setShowModal(false)}
+      ></div>
       <div className="modal-card">
         <header className="modal-card-head">
           <p className="modal-card-title">Edit Budget</p>
-          <button className="delete" aria-label="close" onClick={() => setShowModal(false)}></button>
+          <button
+            className="delete"
+            aria-label="close"
+            onClick={() => setShowModal(false)}
+          ></button>
         </header>
         <section className="modal-card-body">
           <form id="editBudget" onSubmit={handleSubmit(onConfirm)}>
@@ -93,16 +106,17 @@ export const EditBudgetModal: React.FC<Props> = ({ budget, setShowModal, updateB
               <div className="control">
                 <textarea
                   className="textarea"
-                    {...register("description", {
-                      required: {
-                        message: "Description for your budget is required",
-                        value: true,
-                      },
-                      minLength: {
-                        message: "Description of your budget must be at least 3 characters",
-                        value: 3,
-                      },
-                    })}
+                  {...register("description", {
+                    required: {
+                      message: "Description for your budget is required",
+                      value: true,
+                    },
+                    minLength: {
+                      message:
+                        "Description of your budget must be at least 3 characters",
+                      value: 3,
+                    },
+                  })}
                 ></textarea>
               </div>
             </div>
@@ -118,7 +132,9 @@ export const EditBudgetModal: React.FC<Props> = ({ budget, setShowModal, updateB
                     valueAsNumber: true,
                     validate: {
                       positive: (fieldValue: number) => {
-                        return fieldValue >= 0 || "Negative limit is not allowed";
+                        return (
+                          fieldValue >= 0 || "Negative limit is not allowed"
+                        );
                       },
                     },
                   })}
@@ -129,10 +145,21 @@ export const EditBudgetModal: React.FC<Props> = ({ budget, setShowModal, updateB
           </form>
         </section>
         <footer className="modal-card-foot is-flex is-justify-content-center">
-            <div className="buttons">
-          <button disabled={!isValid} form="editBudget" type="submit" className={`button is-success ${updateBudgetPending ? "is-loading" : ""}`}>Save changes</button>
-          <button className="button" onClick={() => setShowModal(false)}>Cancel</button>
-        </div>
+          <div className="buttons">
+            <button className="button" onClick={() => setShowModal(false)}>
+              Cancel
+            </button>
+            <button
+              disabled={!isValid}
+              form="editBudget"
+              type="submit"
+              className={`button is-success ${
+                updateBudgetPending ? "is-loading" : ""
+              }`}
+            >
+              Save changes
+            </button>
+          </div>
         </footer>
       </div>
     </div>

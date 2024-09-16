@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useAppToast } from "../hooks/useAppToast";
 import { getIsLoadingClassName } from "./utils";
+import React, { useState } from "react";
+import { ResetPasswordModal } from "./ResetPasswordModal";
 
 type FormValues = {
   username: string;
@@ -12,6 +14,7 @@ type FormValues = {
 };
 
 export function Login() {
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const form = useForm<FormValues>({ mode: "all" });
   const { register, handleSubmit, formState } = form;
   const { isLoggedIn, username, loading } = useAppSelector(
@@ -19,7 +22,7 @@ export function Login() {
   );
 
   const navigate = useNavigate();
-  const { success, error, warn } = useAppToast();
+  const { success, error } = useAppToast();
 
   const dispatch = useAppDispatch();
 
@@ -129,9 +132,7 @@ export function Login() {
               </button>
               <button
                 className="button is-text"
-                onClick={() => {
-                  warn("We don't have this capability yet");
-                }}
+                onClick={() => setIsResetModalOpen(true)}
               >
                 Forgot your password?
               </button>
@@ -139,6 +140,10 @@ export function Login() {
           </div>
         </div>
       </div>
+      <ResetPasswordModal
+        isOpen={isResetModalOpen}
+        onClose={() => setIsResetModalOpen(false)}
+      />
     </div>
   );
 }
