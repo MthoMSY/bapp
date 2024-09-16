@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store";
 import { useAppToast } from "../../hooks/useAppToast";
 import Decimal from "decimal.js";
+import { Category } from "../../types/category.enum";
 
 interface Props {
   item: Item;
@@ -22,11 +23,11 @@ const EditBudgetItemModal: React.FC<Props> = ({
   budgetId,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const [isLoading, setIsLoading] = useState(false);
-  const [name, setName] = useState(item.name);
-  const [description, setDescription] = useState(item.description);
-  const [cost, setCost] = useState(item.cost.toString());
-  const [category, setCategory] = useState(item.category);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [name, setName] = useState<string>(item.name);
+  const [description, setDescription] = useState<string>(item.description);
+  const [cost, setCost] = useState<string>(item.cost.toString());
+  const [category, setCategory] = useState<Category>(item.category);
   const token = useSelector((state: RootState) => state.user.token);
   const { success, error } = useAppToast();
 
@@ -119,7 +120,7 @@ const EditBudgetItemModal: React.FC<Props> = ({
                   className="input"
                   type="text"
                   value={category}
-                  onChange={(e) => setCategory(e.target.value)}
+                  onChange={(e) => setCategory(e.target.value as Category)}
                 />
               </div>
             </div>
