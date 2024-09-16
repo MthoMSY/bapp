@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../hooks/redux";
 import { signUp } from "../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { useAppToast } from "../hooks/useAppToast";
-import { getIsLoadingClassName } from "./utils";
+import { generatePassword, getIsLoadingClassName } from "./utils";
 import "./SignUp.css";
 
 type FormValues = {
@@ -45,12 +45,9 @@ export function SignUp() {
       .catch(() => error("There was an error signing you up."));
   };
 
-  const generatePassword = () => {
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+";
-    let password = "";
-    for (let i = 0; i < 9; i++) {
-      password += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
+  const setSystemGeneratedPassword = () => {
+    const password = generatePassword();
+    
     setValue("password", password);
     setValue("confirmedPassword", password);
   };
@@ -165,7 +162,7 @@ export function SignUp() {
                 <button
                   type="button"
                   className="button is-small is-info is-light"
-                  onClick={generatePassword}
+                  onClick={setSystemGeneratedPassword}
                 >
                   Generate Password
                 </button>
