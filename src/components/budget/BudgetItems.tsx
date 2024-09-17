@@ -6,12 +6,12 @@ import ItemsDisplay from "./item/ItemsDisplay";
 import AddItemModal from "./item/AddItemModal";
 import { getBudgetItems } from "../../features/budget/budgetSlice";
 import Decimal from "decimal.js";
-import "./BudgetItems.css"; // Make sure to create this CSS file
+import "./BudgetItems.css"; 
 
 export const BudgetItems = () => {
   const location = useLocation();
-  const { id } = location.state;
-  const { budgetName, budgetLimit } = useParams();
+  const { id, limit } = location.state;
+  const { budgetName } = useParams();
   const { username, token } = useAppSelector((state) => state.user);
 
   const [items, setItems] = useState<Item[]>([]);
@@ -39,7 +39,7 @@ export const BudgetItems = () => {
     setCurrentItems(displayItems.slice(indexOfFirstItem, indexOfLastItem));
   }, [displayItems, itemsPerPage, currentItemsPage]);
 
-  /* --------------------------------------- */
+  /* pagination end */
 
   const dispatch = useAppDispatch();
 
@@ -153,7 +153,7 @@ export const BudgetItems = () => {
           updateBudgetItems={updateItems}
           totalCost={getTotal()}
           isLoadingItems={isLoadingItems}
-          budgetLimit={budgetLimit ? new Decimal(budgetLimit) : new Decimal(0)}
+          budgetLimit={limit ? new Decimal(limit) : new Decimal(0)}
           budgetName={budgetName ?? ''}
         />
 

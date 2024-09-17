@@ -43,6 +43,10 @@ const ItemsDisplay = (props: Props) => {
     budgetName,
     budgetLimit,
   } = props;
+
+  console.log(isBudgetLimitExceeded(totalCost, budgetLimit));
+  console.log(budgetLimit.toString());
+  console.log(totalCost.toString());
   const [selectedItem, setSelectedItem] = useState<undefined | Item>(undefined);
   const [
     showDeleteBudgetItemConfirmationModal,

@@ -83,6 +83,7 @@ export function CreateBudgetModal(props: Props) {
                 <input
                   className="input"
                   type="number"
+                  step={0.01}
                   defaultValue={0}
                   id="budgetLimit"
                   {...register("limit", {

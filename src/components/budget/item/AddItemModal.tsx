@@ -16,7 +16,7 @@ type FormValues = {
   name: string;
   description: string;
   cost: number;
-  category: Category;
+  category: string;
 };
 
 const AddItemModal = (props: Props) => {
@@ -90,9 +90,9 @@ const AddItemModal = (props: Props) => {
                   <select
                     {...register("category", {
                       validate: {
-                        isCategorySelected: (value: Category) => {
+                        isCategorySelected: (value: string) => {
                           return (
-                            Object.keys(Category).includes(value) ||
+                            value.length !== 0 ||
                             "Select a category"
                           );
                         },
@@ -102,7 +102,10 @@ const AddItemModal = (props: Props) => {
                     <option value="">Select a category</option>
                     {Object.keys(Category).map((category) => {
                       return (
-                        <option value={category} key={category}>
+                        <option
+                          value={Category[category as keyof typeof Category]}
+                          key={category}
+                        >
                           {category}
                         </option>
                       );
@@ -153,12 +156,9 @@ const AddItemModal = (props: Props) => {
             </div>
             {/*  */}
             <div className="field is-grouped is-grouped-centered">
-            <button 
-              className="button" 
-              onClick={() => setShowModal(false)}
-            >
-              Cancel
-            </button>
+              <button className="button" onClick={() => setShowModal(false)}>
+                Cancel
+              </button>
               <div className="control">
                 <button
                   type="submit"

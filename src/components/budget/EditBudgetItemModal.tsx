@@ -126,18 +126,20 @@ const EditBudgetItemModal: React.FC<Props> = ({
             </div>
           </form>
         </section>
-        <footer className="modal-card-foot">
-          <button
-            type="submit"
-            form="edit-budget-item"
-            className={`button is-success ${isLoading ? "is-loading" : ""}`}
-            onClick={handleSubmit}
-          >
-            Save changes
-          </button>
-          <button className="button" onClick={() => setShowModal(false)}>
-            Cancel
-          </button>
+        <footer className="modal-card-foot is-flex is-justify-content-center">
+          <div className="buttons">
+            <button className="button" onClick={() => setShowModal(false)}>
+              Cancel
+            </button>
+            <button
+              type="submit"
+              form="edit-budget-item"
+              className={`button is-success ${isLoading ? "is-loading" : ""}`}
+              onClick={handleSubmit}
+            >
+              Save changes
+            </button>
+          </div>
         </footer>
       </div>
     </div>
