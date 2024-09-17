@@ -7,6 +7,7 @@ import { CreateBudgetModal } from "./CreateBudgetModal";
 import { EditBudgetModal } from "./EditBudgetModal";  
 import { formatDate } from "../utils";
 import Decimal from 'decimal.js';
+import { formatCurrency } from '../../utils/currencyFormatter';
 
 interface Props {
   budgets: Budget[];
@@ -141,7 +142,7 @@ export const BudgetsDisplay = (props: Props) => {
                 <div className="card-content">
                   <div className="content">
                     <span className="has-text-weight-bold">Limit:</span>{" "}
-                    {budget.limit ? budget.limit.toString() : "No limit"}
+                    {budget.limit ? formatCurrency(budget.limit.toString() ) : "No limit"}
                   </div>
                   <div className="content">
                     <span className="has-text-weight-bold">Description:</span>{" "}

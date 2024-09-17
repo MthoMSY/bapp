@@ -4,6 +4,7 @@ import Decimal from "decimal.js";
 import { DeleteBudgetItemConfirmationModal } from "../DeleteBudgetItemConfirmationModal";
 import EditBudgetItemModal from "../EditBudgetItemModal";
 import "./ItemsDisplay.css";
+import { formatCurrency } from "../../../utils/currencyFormatter";
 
 interface Props {
   items: Item[];
@@ -44,9 +45,6 @@ const ItemsDisplay = (props: Props) => {
     budgetLimit,
   } = props;
 
-  console.log(isBudgetLimitExceeded(totalCost, budgetLimit));
-  console.log(budgetLimit.toString());
-  console.log(totalCost.toString());
   const [selectedItem, setSelectedItem] = useState<undefined | Item>(undefined);
   const [
     showDeleteBudgetItemConfirmationModal,
@@ -94,7 +92,7 @@ const ItemsDisplay = (props: Props) => {
                 ? "is-danger is-light"
                 : "is-warning is-light"
             }`}>
-            R{" " + totalCost.toString()}
+            {formatCurrency(totalCost)}
             </span>
           </div>
         </div>
@@ -121,7 +119,7 @@ const ItemsDisplay = (props: Props) => {
                 ? "is-danger"
                 : "is-success "
             }`}>
-              {budgetLimit.isZero() ? "N/A" : `R${budgetLimit.toString()}`}
+              {budgetLimit.isZero() ? "N/A" : formatCurrency(budgetLimit)}
             </span>
           </div>
         </div>
@@ -138,7 +136,7 @@ const ItemsDisplay = (props: Props) => {
                   <div className="content">
                     <p className="title is-5">{item.name}</p>
                     <p className="subtitle is-6">{item.category}</p>
-                    <p className="has-text-weight-bold">R{item.cost}</p>
+                    <p className="has-text-weight-bold">{formatCurrency(item.cost)}</p>
                     <p>{item.description}</p>
                   </div>
                 </div>
