@@ -27,7 +27,7 @@ const EditBudgetItemModal: React.FC<Props> = ({
   const [name, setName] = useState<string>(item.name);
   const [description, setDescription] = useState<string>(item.description);
   const [cost, setCost] = useState<string>(item.cost.toString());
-  const [category, setCategory] = useState<Category>(item.category);
+  const [category, setCategory] = useState<string>(item.category);
   const token = useSelector((state: RootState) => state.user.token);
   const { success, error } = useAppToast();
 
@@ -116,28 +116,44 @@ const EditBudgetItemModal: React.FC<Props> = ({
             <div className="field">
               <label className="label">Category</label>
               <div className="control">
-                <input
-                  className="input"
-                  type="text"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value as Category)}
-                />
+                <div className="select is-fullwidth">
+                <select
+                value={category}
+                onChange={(e) => {
+                    setCategory(e.target.value)
+                }}
+                  >
+                    <option value="">Select a category</option>
+                    {Object.keys(Category).map((category) => {
+                      return (
+                        <option
+                          value={Category[category as keyof typeof Category]}
+                          key={category}
+                        >
+                          {category}
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
               </div>
             </div>
           </form>
         </section>
-        <footer className="modal-card-foot">
-          <button
-            type="submit"
-            form="edit-budget-item"
-            className={`button is-success ${isLoading ? "is-loading" : ""}`}
-            onClick={handleSubmit}
-          >
-            Save changes
-          </button>
-          <button className="button" onClick={() => setShowModal(false)}>
-            Cancel
-          </button>
+        <footer className="modal-card-foot is-flex is-justify-content-center">
+          <div className="buttons">
+            <button className="button" onClick={() => setShowModal(false)}>
+              Cancel
+            </button>
+            <button
+              type="submit"
+              form="edit-budget-item"
+              className={`button is-success ${isLoading ? "is-loading" : ""}`}
+              onClick={handleSubmit}
+            >
+              Save changes
+            </button>
+          </div>
         </footer>
       </div>
     </div>

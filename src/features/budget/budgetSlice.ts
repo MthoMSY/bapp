@@ -3,6 +3,7 @@ import { api } from "../../api";
 import { Budget } from "../../types/budget";
 import { signOut } from "../user/userSlice";
 import Decimal from "decimal.js";
+import { Category } from "../../types/category.enum";
 
 interface BudgetState {
   error: string;
@@ -113,6 +114,7 @@ export const createBudgetItem = createAsyncThunk(
       description: string;
       cost: number;
       budgetId: string;
+      category: string;
     };
     token: string;
   }) => {

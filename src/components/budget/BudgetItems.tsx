@@ -6,12 +6,13 @@ import ItemsDisplay from "./item/ItemsDisplay";
 import AddItemModal from "./item/AddItemModal";
 import { getBudgetItems } from "../../features/budget/budgetSlice";
 import Decimal from "decimal.js";
-import "./BudgetItems.css"; // Make sure to create this CSS file
+import "./BudgetItems.css";
+import { formatCurrency } from "../../utils/currencyFormatter";
 
 export const BudgetItems = () => {
   const location = useLocation();
-  const { id } = location.state;
-  const { budgetName, budgetLimit } = useParams();
+  const { id, limit } = location.state;
+  const { budgetName } = useParams();
   const { username, token } = useAppSelector((state) => state.user);
 
   const [items, setItems] = useState<Item[]>([]);
@@ -23,6 +24,7 @@ export const BudgetItems = () => {
   const [itemsPerPage] = useState<number>(12);
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
   const [currentItems, setCurrentItems] = useState<Item[]>([]);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
 
   /* Item display pagination */
 
@@ -39,7 +41,7 @@ export const BudgetItems = () => {
     setCurrentItems(displayItems.slice(indexOfFirstItem, indexOfLastItem));
   }, [displayItems, itemsPerPage, currentItemsPage]);
 
-  /* --------------------------------------- */
+  /* pagination end */
 
   const dispatch = useAppDispatch();
 
@@ -75,19 +77,34 @@ export const BudgetItems = () => {
   }, [updateItems, username]);
 
   useMemo(() => {
-    if (searchString === "") {
-      setDisplayItems(items);
-      return;
+    let result = [...items];
+
+    if (searchString !== "") {
+      result = result.filter(
+        (item) =>
+          item.name.toLowerCase().includes(searchString.toLowerCase()) ||
+          item.description.toLowerCase().includes(searchString.toLowerCase())
+      );
     }
 
-    const searchResult = items.filter(
-      (item) =>
-        item.name.toLowerCase().includes(searchString.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchString.toLowerCase())
-    );
+    if (sortOrder) {
+      result.sort((a, b) => {
+        const aPrice = new Decimal(a.cost.toString());
+        const bPrice = new Decimal(b.cost.toString());
+        return sortOrder === 'asc' ? aPrice.minus(bPrice).toNumber() : bPrice.minus(aPrice).toNumber();
+      });
+    }
 
-    setDisplayItems(searchResult);
-  }, [items, searchString]);
+    setDisplayItems(result);
+  }, [items, searchString, sortOrder]);
+
+  const toggleSort = () => {
+    setSortOrder(current => {
+      if (current === null) return 'asc';
+      if (current === 'asc') return 'desc';
+      return null;
+    });
+  };
 
   return (
     <>
@@ -116,14 +133,20 @@ export const BudgetItems = () => {
             </div>
             <div className="column is-full-mobile is-half-tablet is-one-third-desktop">
               <div className="buttons">
-                <button className="button is-link is-outlined">
+                <button
+                  onClick={toggleSort}
+                  className={`button is-info is-outlined ${sortOrder ? 'is-active' : ''}`}
+                >
                   <span className="icon is-small">
-                    <i className="fas fa-filter"></i>
+                    <i className={`fas fa-sort-amount-${sortOrder === 'asc' ? 'up' : 'down'}`}></i>
                   </span>
-                  <span>Add filters</span>
+                  <span>Sort by Price</span>
                 </button>
                 <button
-                  onClick={() => setSearchString("")}
+                  onClick={() => {
+                    setSearchString("");
+                    setSortOrder(null);
+                  }}
                   className="button is-warning is-outlined"
                 >
                   <span className="icon is-small">
@@ -153,7 +176,7 @@ export const BudgetItems = () => {
           updateBudgetItems={updateItems}
           totalCost={getTotal()}
           isLoadingItems={isLoadingItems}
-          budgetLimit={budgetLimit ? new Decimal(budgetLimit) : new Decimal(0)}
+          budgetLimit={limit ? new Decimal(limit) : new Decimal(0)}
           budgetName={budgetName ?? ''}
         />
 
