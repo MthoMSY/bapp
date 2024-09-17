@@ -12,6 +12,7 @@ interface Props {
 type FormValues = {
   name: string;
   description: string;
+  limit: number;
 };
 
 export function CreateBudgetModal(props: Props) {
@@ -29,7 +30,7 @@ export function CreateBudgetModal(props: Props) {
     dispatch(createBudget({ token, payload: formValues }))
       .unwrap()
       .then(() => {
-        success(`Successfully added a new budget ${formValues.name}`);
+        success(`Successfully created new budget ${formValues.name}`);
       })
       .catch(() => {
         error("Error adding budget");
@@ -74,6 +75,27 @@ export function CreateBudgetModal(props: Props) {
                   })}
                 />
                 <p className="help is-danger">{errors.name?.message}</p>
+              </div>
+            </div>
+            <div className="field">
+              <label className="label"></label>
+              <div className="control">
+                <input
+                  className="input"
+                  type="number"
+                  defaultValue={0}
+                  id="budgetLimit"
+                  {...register("limit", {
+                    validate: {
+                      positiveNumber: (fieldValue: number) => {
+                        return (
+                          fieldValue >= 0 || "Budget limit must not be negative"
+                        );
+                      },
+                    },
+                  })}
+                />
+                <p className="help is-danger">{errors.limit?.message}</p>
               </div>
             </div>
             <div className="field">
