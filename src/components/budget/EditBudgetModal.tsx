@@ -80,6 +80,7 @@ export const EditBudgetModal: React.FC<Props> = ({
               <label className="label">Name</label>
               <div className="control">
                 <input
+                  disabled={updateBudgetPending}
                   className="input"
                   type="text"
                   {...register("name", {
@@ -105,6 +106,7 @@ export const EditBudgetModal: React.FC<Props> = ({
               <label className="label">Description</label>
               <div className="control">
                 <textarea
+                  disabled={updateBudgetPending}
                   className="textarea"
                   {...register("description", {
                     required: {
@@ -125,6 +127,7 @@ export const EditBudgetModal: React.FC<Props> = ({
               <label className="label">Limit</label>
               <div className="control">
                 <input
+                  disabled={updateBudgetPending}
                   className="input"
                   type="number"
                   step="0.01"
@@ -146,7 +149,11 @@ export const EditBudgetModal: React.FC<Props> = ({
         </section>
         <footer className="modal-card-foot is-flex is-justify-content-center">
           <div className="buttons">
-            <button className="button" onClick={() => setShowModal(false)}>
+            <button
+              disabled={updateBudgetPending}
+              className="button"
+              onClick={() => setShowModal(false)}
+            >
               Cancel
             </button>
             <button
