@@ -82,6 +82,7 @@ const EditBudgetItemModal: React.FC<Props> = ({
               <label className="label">Name</label>
               <div className="control">
                 <input
+                  disabled={isLoading}
                   className="input"
                   type="text"
                   value={name}
@@ -94,6 +95,7 @@ const EditBudgetItemModal: React.FC<Props> = ({
               <label className="label">Description</label>
               <div className="control">
                 <textarea
+                  disabled={isLoading}
                   className="textarea"
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
@@ -105,6 +107,7 @@ const EditBudgetItemModal: React.FC<Props> = ({
               <div className="control">
                 <input
                   className="input"
+                  disabled={isLoading}
                   type="number"
                   step="0.01"
                   value={cost}
@@ -117,11 +120,12 @@ const EditBudgetItemModal: React.FC<Props> = ({
               <label className="label">Category</label>
               <div className="control">
                 <div className="select is-fullwidth">
-                <select
-                value={category}
-                onChange={(e) => {
-                    setCategory(e.target.value)
-                }}
+                  <select
+                    disabled={isLoading}
+                    value={category}
+                    onChange={(e) => {
+                      setCategory(e.target.value);
+                    }}
                   >
                     <option value="">Select a category</option>
                     {Object.keys(Category).map((category) => {

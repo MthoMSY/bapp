@@ -55,6 +55,7 @@ export function CreateBudgetModal(props: Props) {
               <label className="label"></label>
               <div className="control">
                 <input
+                  disabled={createBudgetPending}
                   className="input"
                   type="text"
                   placeholder="Name"
@@ -81,6 +82,7 @@ export function CreateBudgetModal(props: Props) {
               <label className="label"></label>
               <div className="control">
                 <input
+                  disabled={createBudgetPending}
                   className="input"
                   type="number"
                   step={0.01}
@@ -106,6 +108,7 @@ export function CreateBudgetModal(props: Props) {
                   className="textarea"
                   placeholder="Description"
                   id="budgetDescription"
+                  disabled={createBudgetPending}
                   {...register("description", {
                     required: {
                       value: true,
@@ -145,6 +148,7 @@ export function CreateBudgetModal(props: Props) {
       <button
         className="modal-close is-large"
         aria-label="close"
+        disabled={createBudgetPending}
         onClick={() => setShowModal(false)}
       ></button>
     </div>
